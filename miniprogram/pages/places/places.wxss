@@ -1,0 +1,27 @@
+.add-btn {
+  margin-bottom: 24rpx;
+}
+
+.place-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.radius {
+  color: #1f1f1f;
+  border: 2rpx solid #1f1f1f;
+  border-radius: 999rpx;
+  padding: 6rpx 20rpx;
+  font-size: 24rpx;
+}
+
+.item-count {
+  margin-top: 8rpx;
+}
+
+.remove {
+  margin-top: 16rpx;
+  color: #c0392b;
+  font-size: 26rpx;
+}

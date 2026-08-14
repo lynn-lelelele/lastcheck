@@ -1,0 +1,25 @@
+<view class="container">
+  <view class="card">
+    <view class="card-title">定位权限</view>
+    <view class="row">
+      <text>{{locationAuthorized ? '已授权' : '未授权'}}</text>
+      <button class="btn-primary small" bindtap="onRequestAuth" wx:if="{{!locationAuthorized}}">去授权</button>
+    </view>
+    <view class="muted">授权后，离开场所时将自动触发出门清单提醒。关闭权限仍可手动打卡。</view>
+  </view>
+
+  <view class="card">
+    <view class="card-title">隐私</view>
+    <view class="muted">定位数据仅用于触发提醒，当前版本数据全部保存在本机。开源仓库：</view>
+    <button class="btn-primary small" bindtap="onOpenRepo">github.com/lynn-lelelele/lastcheck</button>
+  </view>
+
+  <view class="card">
+    <view class="card-title">数据</view>
+    <view class="row">
+      <text class="danger" bindtap="onClearData">清空本地数据</text>
+    </view>
+  </view>
+
+  <view class="muted footer">LastCheck v{{version}}</view>
+</view>

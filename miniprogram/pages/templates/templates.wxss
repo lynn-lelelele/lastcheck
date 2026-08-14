@@ -1,0 +1,22 @@
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  margin-bottom: 16rpx;
+}
+
+.tag {
+  background: #f0f0f0;
+  border-radius: 8rpx;
+  padding: 6rpx 16rpx;
+  margin: 0 12rpx 12rpx 0;
+  font-size: 24rpx;
+  color: #555;
+}
+
+.apply-btn {
+  margin-top: 8rpx;
+}
+
+.note {
+  text-align: center;
+}

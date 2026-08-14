@@ -1,0 +1,36 @@
+.place-list {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.place-item {
+  padding: 12rpx 28rpx;
+  border: 2rpx solid #d9d9d9;
+  border-radius: 999rpx;
+  margin: 0 16rpx 16rpx 0;
+  font-size: 26rpx;
+}
+
+.place-item.active {
+  background: #1f1f1f;
+  color: #ffffff;
+  border-color: #1f1f1f;
+}
+
+.item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 24rpx 0;
+  border-bottom: 2rpx solid #f0f0f0;
+}
+
+.item.done .item-name {
+  text-decoration: line-through;
+  color: #8a8a8a;
+}
+
+.item-status {
+  font-size: 24rpx;
+  color: #8a8a8a;
+}

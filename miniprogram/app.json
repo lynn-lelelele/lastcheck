@@ -1,0 +1,23 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/places/places",
+    "pages/templates/templates",
+    "pages/settings/settings"
+  ],
+  "window": {
+    "navigationBarBackgroundColor": "#1f1f1f",
+    "navigationBarTextStyle": "white",
+    "navigationBarTitleText": "LastCheck",
+    "backgroundColor": "#f4f4f4"
+  },
+  "requiredBackgroundModes": ["location"],
+  "permission": {
+    "scope.userLocation": {
+      "desc": "用于在你离开常用场所时提醒你检查携带物品"
+    }
+  },
+  "style": "v2",
+  "lazyCodeLoading": "requiredComponents",
+  "sitemapLocation": "sitemap.json"
+}

@@ -1,0 +1,10 @@
+<view class="container">
+  <view class="card" wx:for="{{templates}}" wx:key="id">
+    <view class="card-title">{{item.name}}</view>
+    <view class="tags">
+      <text class="tag" wx:for="{{item.items}}" wx:for-item="it" wx:key="*this">{{it}}</text>
+    </view>
+    <button class="btn-primary apply-btn" data-id="{{item.id}}" bindtap="onApply">套用此模板</button>
+  </view>
+  <view class="muted note">模板为社区共建内容，欢迎在 GitHub 提交新的场所模板。</view>
+</view>

@@ -1,0 +1,19 @@
+<view class="container">
+  <button class="btn-primary add-btn" bindtap="onAddPlace">添加场所（选择当前位置）</button>
+
+  <view class="card" wx:for="{{places}}" wx:key="id">
+    <view class="place-row">
+      <view>
+        <view class="card-title">{{item.name}}</view>
+        <view class="muted">{{item.address}}</view>
+      </view>
+      <view class="radius" data-id="{{item.id}}" bindtap="onEditRadius">半径 {{item.radius}}m</view>
+    </view>
+    <view class="muted item-count">{{item.items.length}} 件物品</view>
+    <view class="remove" data-id="{{item.id}}" bindtap="onRemovePlace">删除</view>
+  </view>
+
+  <view class="card" wx:if="{{places.length === 0}}">
+    <view class="muted">还没有场所。点击上方按钮，选择家或公司所在位置。</view>
+  </view>
+</view>
