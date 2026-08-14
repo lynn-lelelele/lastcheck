@@ -15,6 +15,8 @@
 
 ## 路线图
 
+架构设计见 [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)。
+
 见 [ROADMAP.md](ROADMAP.md)
 
 ## 快速开始
