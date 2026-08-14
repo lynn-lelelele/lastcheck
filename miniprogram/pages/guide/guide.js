@@ -1,20 +1,162 @@
+const store = require('../../utils/store');
+
+// 场景 → 默认物品（focus=random 时使用）
+const SCENE_ITEMS = {
+  home: ['钥匙', '手机', '钱包', '充电器', '雨伞'],
+  office: ['工卡', '电脑', '充电器', '耳机'],
+  gym: ['毛巾', '换洗衣物', '水杯', '耳机', '健身卡'],
+  other: ['手机', '钱包', '钥匙']
+};
+
+const FOCUS_ITEMS = {
+  essentials: ['钥匙', '手机', '钱包', '工卡', '充电器', '雨伞'],
+  devices: ['手机', '充电器', '耳机', '电脑', '充电宝']
+};
+
+const QUESTIONS = [
+  {
+    id: 'scene',
+    title: '你最常从哪出门？',
+    options: [
+      { key: 'home', label: '家' },
+      { key: 'office', label: '公司' },
+      { key: 'gym', label: '健身房' },
+      { key: 'other', label: '其他场所' }
+    ]
+  },
+  {
+    id: 'focus',
+    title: '出门最怕忘带什么？',
+    options: [
+      { key: 'essentials', label: '钥匙、证件这类必需品' },
+      { key: 'devices', label: '充电器、耳机这类电子设备' },
+      { key: 'random', label: '没准，什么都可能忘' }
+    ]
+  },
+  {
+    id: 'auto',
+    title: '要不要开启自动提醒？',
+    options: [
+      { key: 'on', label: '开启：离开场所时自动提醒（推荐）' },
+      { key: 'off', label: '暂不开启：先手动打卡' }
+    ]
+  }
+];
+
 Page({
   data: {
-    steps: [
-      { no: '01', title: '添加场所', desc: '选一个常去的坐标，比如家或公司，设定提醒半径。' },
-      { no: '02', title: '套用模板', desc: '从模板库一键生成该场所的出门清单，可自行增删。' },
-      { no: '03', title: '出门打卡', desc: '点「我出门了」，逐项确认，未确认项会高亮提醒。' }
-    ]
+    phase: 'welcome',   // welcome | question | done
+    current: 0,
+    question: null,
+    total: QUESTIONS.length,
+    answers: [],
+    summary: ''
   },
 
   onLoad() {
-    // 已看过引导，直接进首页
     if (wx.getStorageSync('lastcheck_guide_seen')) {
       wx.switchTab({ url: '/pages/index/index' });
     }
   },
 
   onStart() {
+    this.showQuestion(0);
+  },
+
+  showQuestion(index) {
+    if (index >= QUESTIONS.length) {
+      this.finish();
+      return;
+    }
+    this.setData({ phase: 'question', current: index, question: QUESTIONS[index] });
+  },
+
+  onPickOption(e) {
+    const key = e.currentTarget.dataset.key;
+    const id = this.data.question.id;
+    const answers = this.data.answers.concat([key]);
+
+    if (id === 'scene') {
+      this.pickScene(key, answers);
+    } else if (id === 'focus') {
+      this.pickFocus(key, answers);
+    } else {
+      this.pickAuto(key, answers);
+    }
+  },
+
+  pickScene(key, answers) {
+    wx.chooseLocation({
+      success: (res) => {
+        const places = store.getPlaces();
+        places.push({
+          id: 'p_' + Date.now(),
+          name: this.sceneLabel(key),
+          address: res.address || res.name || '',
+          latitude: res.latitude,
+          longitude: res.longitude,
+          radius: 100,
+          items: [],
+          checkedMap: {}
+        });
+        store.savePlaces(places);
+        this.setData({ answers });
+        this.showQuestion(this.data.current + 1);
+      },
+      fail: () => {
+        this.setData({ answers });
+        this.showQuestion(this.data.current + 1);
+      }
+    });
+  },
+
+  pickFocus(key, answers) {
+    // 把生成的物品写入刚才创建的场所
+    const places = store.getPlaces();
+    if (places.length) {
+      const items = key === 'random'
+        ? (SCENE_ITEMS[answers[0]] || ['手机', '钱包', '钥匙'])
+        : FOCUS_ITEMS[key];
+      places[places.length - 1].items = items;
+      places[places.length - 1].checkedMap = {};
+      store.savePlaces(places);
+    }
+    this.setData({ answers });
+    this.showQuestion(this.data.current + 1);
+  },
+
+  pickAuto(key, answers) {
+    if (key === 'on') {
+      wx.authorize({
+        scope: 'scope.userLocation',
+        fail: () => {
+          wx.showModal({
+            title: '定位未授权',
+            content: '之后可在「设置」页开启，未开启时使用手动打卡。',
+            showCancel: false
+          });
+        }
+      });
+    }
+    this.setData({ answers });
+
+    const scene = this.sceneLabel(answers[0]);
+    const places = store.getPlaces();
+    if (places.length) {
+      this.setData({ summary: '已为你准备「' + places[places.length - 1].name + '」的出门清单（' + places[places.length - 1].items.length + ' 件物品），定位提醒已按你的选择配置。' });
+    } else {
+      this.setData({ summary: '已记录你的偏好：' + scene + '。场所定位未完成，可稍后在「场所」页添加。' });
+    }
+    this.setData({ phase: 'done' });
+  },
+
+  sceneLabel(key) {
+    const q = QUESTIONS[0];
+    const opt = q.options.find(o => o.key === key);
+    return opt ? opt.label : '场所';
+  },
+
+  onDone() {
     wx.setStorageSync('lastcheck_guide_seen', true);
     wx.switchTab({ url: '/pages/index/index' });
   }
