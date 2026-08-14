@@ -86,27 +86,75 @@ Page({
   },
 
   pickScene(key, answers) {
-    wx.chooseLocation({
-      success: (res) => {
-        const places = store.getPlaces();
-        places.push({
-          id: 'p_' + Date.now(),
-          name: this.sceneLabel(key),
-          address: res.address || res.name || '',
-          latitude: res.latitude,
-          longitude: res.longitude,
-          radius: 100,
-          items: [],
-          checkedMap: {}
+    this.ensureLocationAuth((ok) => {
+      if (!ok) {
+        wx.showModal({
+          title: '需要定位权限',
+          content: '地图选点需要定位权限。可以在弹窗中选择允许，或在「设置」页开启定位后重试。',
+          confirmText: '去设置',
+          cancelText: '跳过',
+          success: (r) => {
+            if (r.confirm) {
+              wx.openSetting();
+            } else {
+              this.setData({ answers });
+              this.showQuestion(this.data.current + 1);
+            }
+          }
         });
-        store.savePlaces(places);
-        this.setData({ answers });
-        this.showQuestion(this.data.current + 1);
-      },
-      fail: () => {
-        this.setData({ answers });
-        this.showQuestion(this.data.current + 1);
+        return;
       }
+      wx.chooseLocation({
+        success: (res) => {
+          const places = store.getPlaces();
+          places.push({
+            id: 'p_' + Date.now(),
+            name: this.sceneLabel(key),
+            address: res.address || res.name || '',
+            latitude: res.latitude,
+            longitude: res.longitude,
+            radius: 100,
+            items: [],
+            checkedMap: {}
+          });
+          store.savePlaces(places);
+          this.setData({ answers });
+          this.showQuestion(this.data.current + 1);
+        },
+        fail: (err) => {
+          const msg = (err && err.errMsg) || '地图选点未完成';
+          wx.showModal({
+            title: '选点失败',
+            content: msg,
+            confirmText: '重试',
+            cancelText: '跳过',
+            success: (r) => {
+              if (r.cancel) {
+                this.setData({ answers });
+                this.showQuestion(this.data.current + 1);
+              }
+            }
+          });
+        }
+      });
+    });
+  },
+
+  // 检查并请求定位授权
+  ensureLocationAuth(cb) {
+    wx.getSetting({
+      success: (res) => {
+        if (res.authSetting['scope.userLocation']) {
+          cb(true);
+          return;
+        }
+        wx.authorize({
+          scope: 'scope.userLocation',
+          success: () => cb(true),
+          fail: () => cb(false)
+        });
+      },
+      fail: () => cb(false)
     });
   },
 
