@@ -126,38 +126,44 @@ Page({
       }
       wx.chooseLocation({
         success: (res) => {
-          const places = store.getPlaces();
-          places.push({
-            id: 'p_' + Date.now(),
-            name: this.sceneLabel(key),
-            address: res.address || res.name || '',
-            latitude: res.latitude,
-            longitude: res.longitude,
-            radius: 100,
-            items: [],
-            checkedMap: {}
-          });
-          store.savePlaces(places);
-          this.setData({ answers });
-          this.showQuestion(this.data.current + 1);
+          this.createPlaceWithCoords(key, answers, res.address || res.name || '', res.latitude, res.longitude);
         },
-        fail: (err) => {
-          const msg = (err && err.errMsg) || '地图选点未完成';
+        fail: () => {
           wx.showModal({
             title: '选点失败',
-            content: msg,
+            content: '当前环境无法打开地图（游客模式常见）。可用演示位置继续，正式环境请授权定位后重试。',
             confirmText: '重试',
-            cancelText: '跳过',
+            cancelText: '用演示位置',
             success: (r) => {
-              if (r.cancel) {
-                this.setData({ answers });
-                this.showQuestion(this.data.current + 1);
+              if (r.confirm) {
+                this.pickScene(key, answers);
+              } else {
+                // 演示位置：长沙默认坐标，仅用于验收流程
+                this.createPlaceWithCoords(key, answers, '演示位置（长沙，可删除）', 28.228209, 112.938814);
               }
             }
           });
         }
       });
     });
+  },
+
+  // 用坐标创建场所（地图选点成功或演示位置共用）
+  createPlaceWithCoords(key, answers, address, latitude, longitude) {
+    const places = store.getPlaces();
+    places.push({
+      id: 'p_' + Date.now(),
+      name: this.sceneLabel(key),
+      address: address || '',
+      latitude: latitude,
+      longitude: longitude,
+      radius: 100,
+      items: [],
+      checkedMap: {}
+    });
+    store.savePlaces(places);
+    this.setData({ answers });
+    this.showQuestion(this.data.current + 1);
   },
 
   // 检查并请求定位授权
