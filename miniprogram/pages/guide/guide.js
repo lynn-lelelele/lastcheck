@@ -50,10 +50,12 @@ Page({
     question: null,
     total: QUESTIONS.length,
     answers: [],
-    summary: ''
+    summary: '',
+    build: 'd4e0aa3'
   },
 
   onLoad() {
+    console.log('[LastCheck] guide loaded, build d4e0aa3');
     if (wx.getStorageSync('lastcheck_guide_seen')) {
       wx.switchTab({ url: '/pages/index/index' });
     }

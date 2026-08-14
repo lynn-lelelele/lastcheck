@@ -66,3 +66,9 @@
 .start-btn::after {
   border: none;
 }
+.build {
+  margin-top: 32rpx;
+  text-align: center;
+  font-size: 22rpx;
+  color: #5a5a5a;
+}

@@ -32,3 +32,4 @@
     <button class="start-btn" bindtap="onDone">开始使用</button>
   </block>
 </view>
+<view class="build">build {{build}}</view>
