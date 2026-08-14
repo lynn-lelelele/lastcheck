@@ -85,9 +85,27 @@ Page({
     }
   },
 
-  // 第 1 题：创建场所。降级链：地图选点 → 直接取定位 → 演示位置。
-  // 游客模式下定位 API 可能不回调，故用双重硬超时兜底，8 秒内必有结果。
+  // 第 1 题：创建场所。先让用户选择获取方式，不依赖定位 API 的回调，
+  // 保证任何环境下点「家」都有即时反馈。
   pickScene(key, answers) {
+    wx.showActionSheet({
+      itemList: ['地图选点', '用演示位置'],
+      success: (r) => {
+        if (r.tapIndex === 1) {
+          this.createPlaceWithCoords(key, answers, '演示位置（长沙，可删除）', 28.228209, 112.938814);
+          return;
+        }
+        this.tryMapPick(key, answers);
+      },
+      fail: () => {
+        this.setData({ answers });
+        this.showQuestion(this.data.current + 1);
+      }
+    });
+  },
+
+  // 地图选点：8 秒无回调自动降级为演示位置
+  tryMapPick(key, answers) {
     wx.showLoading({ title: '正在获取位置…', mask: true });
     let settled = false;
 
@@ -98,55 +116,20 @@ Page({
       this.createPlaceWithCoords(key, answers, address, latitude, longitude);
     };
 
-    const showDemo = () => {
+    const useDemo = () => {
       if (settled) return;
       settled = true;
       wx.hideLoading();
-      wx.showModal({
-        title: '定位不可用',
-        content: '当前环境无法获取位置。可用演示位置继续，之后可在「场所」页修改。',
-        confirmText: '用演示位置',
-        cancelText: '跳过',
-        success: (r) => {
-          if (r.confirm) {
-            this.createPlaceWithCoords(key, answers, '演示位置（长沙，可删除）', 28.228209, 112.938814);
-          } else {
-            this.setData({ answers });
-            this.showQuestion(this.data.current + 1);
-          }
-        }
-      });
+      wx.showToast({ title: '地图不可用，已用演示位置', icon: 'none' });
+      this.createPlaceWithCoords(key, answers, '演示位置（长沙，可删除）', 28.228209, 112.938814);
     };
 
-    const tryGetLocation = () => {
-      wx.getLocation({
-        type: 'gcj02',
-        success: (res) => {
-          finish('当前位置（模拟器定位）', res.latitude, res.longitude);
-        },
-        fail: () => showDemo()
-      });
-    };
-
-    // 地图 4 秒无回调 → 尝试直接定位
-    const mapTimer = setTimeout(() => {
-      if (!settled) tryGetLocation();
-    }, 4000);
-    // 总超时 8 秒：无论 API 是否回调，强制出结果
-    const hardTimer = setTimeout(() => {
-      if (!settled) showDemo();
-    }, 8000);
-
+    setTimeout(useDemo, 8000);
     wx.chooseLocation({
       success: (res) => {
-        clearTimeout(mapTimer);
-        clearTimeout(hardTimer);
         finish(res.address || res.name || '', res.latitude, res.longitude);
       },
-      fail: () => {
-        clearTimeout(mapTimer);
-        tryGetLocation();
-      }
+      fail: () => useDemo()
     });
   },
 
