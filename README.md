@@ -15,6 +15,8 @@
 
 ## 路线图
 
+
+验收标准见 [docs/ACCEPTANCE.md](docs/ACCEPTANCE.md)。
 见 [ROADMAP.md](ROADMAP.md)，架构设计见 [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)。
 
 ## 快速开始
