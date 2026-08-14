@@ -100,8 +100,21 @@ Page({
         this.tryMapPick(key, answers);
       },
       fail: () => {
-        this.setData({ answers });
-        this.showQuestion(this.data.current + 1);
+        // 取消选择：弹确认，避免误触导致场所缺失
+        wx.showModal({
+          title: '未选择获取方式',
+          content: '可用演示位置创建场所，之后可在「场所」页修改或删除。',
+          confirmText: '用演示位置',
+          cancelText: '跳过',
+          success: (r) => {
+            if (r.confirm) {
+              this.createPlaceWithCoords(key, answers, '演示位置（长沙，可删除）', 28.228209, 112.938814);
+            } else {
+              this.setData({ answers });
+              this.showQuestion(this.data.current + 1);
+            }
+          }
+        });
       }
     });
   },
