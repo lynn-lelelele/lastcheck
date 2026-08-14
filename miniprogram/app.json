@@ -1,5 +1,6 @@
 {
   "pages": [
+    "pages/guide/guide",
     "pages/index/index",
     "pages/places/places",
     "pages/templates/templates",

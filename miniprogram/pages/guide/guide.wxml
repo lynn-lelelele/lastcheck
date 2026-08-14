@@ -1,0 +1,18 @@
+<view class="guide">
+  <view class="hero">
+    <view class="logo">LastCheck</view>
+    <view class="slogan">离开场所前，替你盯住要带的东西</view>
+  </view>
+
+  <view class="steps">
+    <view class="step" wx:for="{{steps}}" wx:key="no">
+      <view class="step-no">{{item.no}}</view>
+      <view class="step-body">
+        <view class="step-title">{{item.title}}</view>
+        <view class="step-desc">{{item.desc}}</view>
+      </view>
+    </view>
+  </view>
+
+  <button class="start-btn" bindtap="onStart">开始使用</button>
+</view>
