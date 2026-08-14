@@ -1,0 +1,18 @@
+# Node
+node_modules/
+
+# 微信开发者工具/小程序
+miniprogram_npm/
+project.private.config.json
+*.wxml.d.ts
+
+# 环境变量与密钥
+.env
+.env.*
+
+# 系统
+.DS_Store
+Thumbs.db
+
+# 日志
+*.log
