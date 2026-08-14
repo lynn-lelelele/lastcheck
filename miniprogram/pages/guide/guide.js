@@ -45,7 +45,7 @@ const QUESTIONS = [
 
 Page({
   data: {
-    phase: 'welcome',   // welcome | question | done
+    phase: 'welcome',
     current: 0,
     question: null,
     total: QUESTIONS.length,
@@ -85,79 +85,56 @@ Page({
     }
   },
 
+  // 第 1 题：创建场所。降级链：地图选点 → 直接取定位 → 演示位置。
+  // 不依赖 wx.authorize 回调（游客模式下回调可能不触发）。
   pickScene(key, answers) {
-    this.ensureLocationAuth((ok) => {
-      if (!ok) {
-        wx.showModal({
-          title: '需要定位权限',
-          content: '地图选点需要定位权限。可以在弹窗中选择允许，或在「设置」页开启定位后重试。',
-          confirmText: '去设置',
-          cancelText: '跳过',
-          success: (r) => {
-            if (r.confirm) {
-              wx.openSetting({
-                success: (res) => {
-                  if (res.authSetting['scope.userLocation']) {
-                    wx.showToast({ title: '授权成功', icon: 'success' });
-                    this.pickScene(key, answers);
-                  } else {
-                    wx.showModal({
-                      title: '仍未开启定位',
-                      content: '请在设置页打开「位置信息」授权（选择使用小程序期间）后重试。',
-                      showCancel: false
-                    });
-                  }
-                },
-                fail: () => {
-                  wx.showModal({
-                    title: '无法打开设置页',
-                    content: '当前环境可能不支持打开设置页。请使用「清除授权数据」后重新授权。',
-                    showCancel: false
-                  });
-                }
-              });
-            } else {
-              this.setData({ answers });
-              this.showQuestion(this.data.current + 1);
-            }
+    let settled = false;
+    const finish = (address, latitude, longitude) => {
+      if (settled) return;
+      settled = true;
+      this.createPlaceWithCoords(key, answers, address, latitude, longitude);
+    };
+    const showDemo = () => {
+      if (settled) return;
+      settled = true;
+      wx.showModal({
+        title: '定位不可用',
+        content: '当前环境无法获取位置。可用演示位置继续，之后可在「场所」页修改。',
+        confirmText: '用演示位置',
+        cancelText: '跳过',
+        success: (r) => {
+          if (r.confirm) {
+            this.createPlaceWithCoords(key, answers, '演示位置（长沙，可删除）', 28.228209, 112.938814);
+          } else {
+            this.setData({ answers });
+            this.showQuestion(this.data.current + 1);
           }
-        });
-        return;
-      }
-      // 地图选点带超时兜底：游客模式下地图组件可能不回调，5 秒后自动降级
-      let settled = false;
-      const degrade = () => {
-        if (settled) return;
-        settled = true;
-        wx.showModal({
-          title: '选点失败',
-          content: '地图在当前环境不可用。可用模拟器当前位置或演示位置继续。',
-          confirmText: '用当前位置',
-          cancelText: '用演示位置',
-          success: (r) => {
-            if (r.confirm) {
-              this.getCurrentLocation(key, answers);
-            } else {
-              this.createPlaceWithCoords(key, answers, '演示位置（长沙，可删除）', 28.228209, 112.938814);
-            }
-          }
-        });
-      };
-      setTimeout(degrade, 5000);
-      wx.chooseLocation({
-        success: (res) => {
-          if (settled) return;
-          settled = true;
-          this.createPlaceWithCoords(key, answers, res.address || res.name || '', res.latitude, res.longitude);
-        },
-        fail: () => {
-          degrade();
         }
       });
+    };
+    const fallback = () => {
+      if (settled) return;
+      settled = true;
+      wx.getLocation({
+        type: 'gcj02',
+        success: (res) => {
+          this.createPlaceWithCoords(key, answers, '当前位置（模拟器定位）', res.latitude, res.longitude);
+        },
+        fail: () => showDemo()
+      });
+    };
+
+    // 地图 5 秒无回调则降级
+    setTimeout(fallback, 5000);
+    wx.chooseLocation({
+      success: (res) => {
+        finish(res.address || res.name || '', res.latitude, res.longitude);
+      },
+      fail: () => fallback()
     });
   },
 
-  // 用坐标创建场所（地图选点成功或演示位置共用）
+  // 用坐标创建场所（地图/定位/演示位置共用）
   createPlaceWithCoords(key, answers, address, latitude, longitude) {
     const places = store.getPlaces();
     places.push({
@@ -175,39 +152,7 @@ Page({
     this.showQuestion(this.data.current + 1);
   },
 
-  // 用 wx.getLocation 获取当前位置（模拟器可用），作为地图选点的降级路径
-  getCurrentLocation(key, answers) {
-    wx.getLocation({
-      type: 'gcj02',
-      success: (res) => {
-        this.createPlaceWithCoords(key, answers, '当前位置（模拟器定位）', res.latitude, res.longitude);
-      },
-      fail: () => {
-        this.createPlaceWithCoords(key, answers, '演示位置（长沙，可删除）', 28.228209, 112.938814);
-      }
-    });
-  },
-
-  // 检查并请求定位授权
-  ensureLocationAuth(cb) {
-    wx.getSetting({
-      success: (res) => {
-        if (res.authSetting['scope.userLocation']) {
-          cb(true);
-          return;
-        }
-        wx.authorize({
-          scope: 'scope.userLocation',
-          success: () => cb(true),
-          fail: () => cb(false)
-        });
-      },
-      fail: () => cb(false)
-    });
-  },
-
   pickFocus(key, answers) {
-    // 把生成的物品写入刚才创建的场所
     const places = store.getPlaces();
     if (places.length) {
       const items = key === 'random'
@@ -236,12 +181,12 @@ Page({
     }
     this.setData({ answers });
 
-    const scene = this.sceneLabel(answers[0]);
     const places = store.getPlaces();
     if (places.length) {
-      this.setData({ summary: '已为你准备「' + places[places.length - 1].name + '」的出门清单（' + places[places.length - 1].items.length + ' 件物品），定位提醒已按你的选择配置。' });
+      const place = places[places.length - 1];
+      this.setData({ summary: '已为你准备「' + place.name + '」的出门清单（' + place.items.length + ' 件物品），定位提醒已按你的选择配置。' });
     } else {
-      this.setData({ summary: '已记录你的偏好：' + scene + '。场所定位未完成，可稍后在「场所」页添加。' });
+      this.setData({ summary: '已记录你的偏好：' + this.sceneLabel(answers[0]) + '。场所定位未完成，可稍后在「场所」页添加。' });
     }
     this.setData({ phase: 'done' });
   },
