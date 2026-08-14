@@ -86,17 +86,22 @@ Page({
   },
 
   // 第 1 题：创建场所。降级链：地图选点 → 直接取定位 → 演示位置。
-  // 不依赖 wx.authorize 回调（游客模式下回调可能不触发）。
+  // 游客模式下定位 API 可能不回调，故用双重硬超时兜底，8 秒内必有结果。
   pickScene(key, answers) {
+    wx.showLoading({ title: '正在获取位置…', mask: true });
     let settled = false;
+
     const finish = (address, latitude, longitude) => {
       if (settled) return;
       settled = true;
+      wx.hideLoading();
       this.createPlaceWithCoords(key, answers, address, latitude, longitude);
     };
+
     const showDemo = () => {
       if (settled) return;
       settled = true;
+      wx.hideLoading();
       wx.showModal({
         title: '定位不可用',
         content: '当前环境无法获取位置。可用演示位置继续，之后可在「场所」页修改。',
@@ -112,25 +117,36 @@ Page({
         }
       });
     };
-    const fallback = () => {
-      if (settled) return;
-      settled = true;
+
+    const tryGetLocation = () => {
       wx.getLocation({
         type: 'gcj02',
         success: (res) => {
-          this.createPlaceWithCoords(key, answers, '当前位置（模拟器定位）', res.latitude, res.longitude);
+          finish('当前位置（模拟器定位）', res.latitude, res.longitude);
         },
         fail: () => showDemo()
       });
     };
 
-    // 地图 5 秒无回调则降级
-    setTimeout(fallback, 5000);
+    // 地图 4 秒无回调 → 尝试直接定位
+    const mapTimer = setTimeout(() => {
+      if (!settled) tryGetLocation();
+    }, 4000);
+    // 总超时 8 秒：无论 API 是否回调，强制出结果
+    const hardTimer = setTimeout(() => {
+      if (!settled) showDemo();
+    }, 8000);
+
     wx.chooseLocation({
       success: (res) => {
+        clearTimeout(mapTimer);
+        clearTimeout(hardTimer);
         finish(res.address || res.name || '', res.latitude, res.longitude);
       },
-      fail: () => fallback()
+      fail: () => {
+        clearTimeout(mapTimer);
+        tryGetLocation();
+      }
     });
   },
 
