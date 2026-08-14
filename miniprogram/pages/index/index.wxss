@@ -34,3 +34,22 @@
   font-size: 24rpx;
   color: #8a8a8a;
 }
+
+.leave-btn {
+  margin-top: 8rpx;
+}
+
+.leave-tip {
+  font-size: 26rpx;
+  margin-bottom: 8rpx;
+}
+
+.trigger-info {
+  color: #c0392b;
+  font-size: 28rpx;
+  font-weight: 600;
+}
+
+.trigger-info.ok {
+  color: #2e7d32;
+}

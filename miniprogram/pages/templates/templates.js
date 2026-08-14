@@ -1,3 +1,5 @@
+const store = require('../../utils/store');
+
 // 内置场所模板。模板是纯数据，社区可通过 PR 扩充（见 templates/README.md）。
 const BUILTIN_TEMPLATES = [
   { id: 't_home', name: '家', items: ['钥匙', '手机', '钱包', '工卡', '充电器', '雨伞'] },
@@ -16,9 +18,35 @@ Page({
     const id = e.currentTarget.dataset.id;
     const tpl = BUILTIN_TEMPLATES.find(t => t.id === id);
     if (!tpl) return;
-    wx.navigateTo({
-      url: '/pages/places/places?template=' + tpl.id
+
+    const places = store.getPlaces();
+    if (places.length === 0) {
+      wx.showModal({
+        title: '还没有场所',
+        content: '请先到「场所」页添加一个地点（如家或公司），再把模板套用到该场所。',
+        confirmText: '去添加',
+        success: (r) => {
+          if (r.confirm) {
+            wx.switchTab({ url: '/pages/places/places' });
+          }
+        }
+      });
+      return;
+    }
+
+    const names = places.map(p => p.name);
+    wx.showActionSheet({
+      itemList: names,
+      success: (res) => {
+        const target = places[res.tapIndex];
+        target.items = tpl.items.slice();
+        target.checkedMap = {};
+        store.savePlaces(places);
+        wx.showToast({ title: '已套用到「' + target.name + '」', icon: 'success' });
+        setTimeout(() => {
+          wx.switchTab({ url: '/pages/index/index' });
+        }, 800);
+      }
     });
-    wx.showToast({ title: '请在「场所」中添加该模板', icon: 'none' });
   }
 });

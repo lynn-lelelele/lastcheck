@@ -11,6 +11,19 @@
     "navigationBarTitleText": "LastCheck",
     "backgroundColor": "#f4f4f4"
   },
+  "tabBar": {
+    "position": "top",
+    "color": "#8a8a8a",
+    "selectedColor": "#1f1f1f",
+    "backgroundColor": "#ffffff",
+    "borderStyle": "black",
+    "list": [
+      { "pagePath": "pages/index/index", "text": "清单" },
+      { "pagePath": "pages/places/places", "text": "场所" },
+      { "pagePath": "pages/templates/templates", "text": "模板" },
+      { "pagePath": "pages/settings/settings", "text": "设置" }
+    ]
+  },
   "requiredBackgroundModes": ["location"],
   "permission": {
     "scope.userLocation": {

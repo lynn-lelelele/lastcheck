@@ -14,7 +14,7 @@
 
   <view class="card" wx:if="{{currentPlace}}">
     <view class="card-title">出门清单</view>
-    <view wx:if="{{items.length === 0}}" class="muted">该场所还没有物品，去模板库套用或自行添加。</view>
+    <view wx:if="{{items.length === 0}}" class="muted">该场所还没有物品，去「模板」套用或到「场所」添加。</view>
     <view
       wx:for="{{items}}"
       wx:key="index"
@@ -28,14 +28,19 @@
     <button class="btn-primary" bindtap="onCheckAll" wx:if="{{items.length}}">全部确认已带</button>
   </view>
 
+  <view class="card" wx:if="{{currentPlace && items.length}}">
+    <button class="btn-primary leave-btn" bindtap="onManualLeave">我出门了</button>
+  </view>
+
+  <view class="card" wx:if="{{showLeaveCard}}">
+    <view class="card-title">出门提醒</view>
+    <view class="leave-tip">离开「{{currentPlace.name}}」前请确认以下物品</view>
+    <view class="trigger-info {{triggerInfo.indexOf('安心') > -1 ? 'ok' : ''}}">{{triggerInfo}}</view>
+  </view>
+
   <view class="card" wx:if="{{!currentPlace}}">
     <view class="card-title">还没有场所</view>
     <view class="muted">先去「场所」添加家或公司，再套用模板生成清单。</view>
     <button class="btn-primary" bindtap="goPlaces">去添加场所</button>
-  </view>
-
-  <view class="card" wx:if="{{triggerInfo}}">
-    <view class="card-title">触发状态</view>
-    <view class="muted">{{triggerInfo}}</view>
   </view>
 </view>
