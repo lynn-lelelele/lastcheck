@@ -122,8 +122,14 @@ Page({
       if (settled) return;
       settled = true;
       wx.hideLoading();
-      wx.showToast({ title: '地图不可用，已用演示位置', icon: 'none' });
-      this.createPlaceWithCoords(key, answers, '演示位置（长沙，可删除）', 28.228209, 112.938814);
+      wx.showModal({
+        title: '地图不可用',
+        content: '当前为演示模式，已用演示位置创建场所。正式环境（登录工具或真机）会正常使用地图选点。',
+        confirmText: '知道了',
+        success: () => {
+          this.createPlaceWithCoords(key, answers, '演示位置（长沙，可删除）', 28.228209, 112.938814);
+        }
+      });
     };
 
     setTimeout(useDemo, 8000);
