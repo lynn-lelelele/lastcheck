@@ -95,7 +95,27 @@ Page({
           cancelText: '跳过',
           success: (r) => {
             if (r.confirm) {
-              wx.openSetting();
+              wx.openSetting({
+                success: (res) => {
+                  if (res.authSetting['scope.userLocation']) {
+                    wx.showToast({ title: '授权成功', icon: 'success' });
+                    this.pickScene(key, answers);
+                  } else {
+                    wx.showModal({
+                      title: '仍未开启定位',
+                      content: '请在设置页打开「位置信息」授权（选择使用小程序期间）后重试。',
+                      showCancel: false
+                    });
+                  }
+                },
+                fail: () => {
+                  wx.showModal({
+                    title: '无法打开设置页',
+                    content: '当前环境可能不支持打开设置页。请使用「清除授权数据」后重新授权。',
+                    showCancel: false
+                  });
+                }
+              });
             } else {
               this.setData({ answers });
               this.showQuestion(this.data.current + 1);
