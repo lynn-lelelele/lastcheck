@@ -124,25 +124,34 @@ Page({
         });
         return;
       }
+      // 地图选点带超时兜底：游客模式下地图组件可能不回调，5 秒后自动降级
+      let settled = false;
+      const degrade = () => {
+        if (settled) return;
+        settled = true;
+        wx.showModal({
+          title: '选点失败',
+          content: '地图在当前环境不可用。可用模拟器当前位置或演示位置继续。',
+          confirmText: '用当前位置',
+          cancelText: '用演示位置',
+          success: (r) => {
+            if (r.confirm) {
+              this.getCurrentLocation(key, answers);
+            } else {
+              this.createPlaceWithCoords(key, answers, '演示位置（长沙，可删除）', 28.228209, 112.938814);
+            }
+          }
+        });
+      };
+      setTimeout(degrade, 5000);
       wx.chooseLocation({
         success: (res) => {
+          if (settled) return;
+          settled = true;
           this.createPlaceWithCoords(key, answers, res.address || res.name || '', res.latitude, res.longitude);
         },
         fail: () => {
-          wx.showModal({
-            title: '选点失败',
-            content: '当前环境无法打开地图（游客模式常见）。可用演示位置继续，正式环境请授权定位后重试。',
-            confirmText: '重试',
-            cancelText: '用演示位置',
-            success: (r) => {
-              if (r.confirm) {
-                this.pickScene(key, answers);
-              } else {
-                // 演示位置：长沙默认坐标，仅用于验收流程
-                this.createPlaceWithCoords(key, answers, '演示位置（长沙，可删除）', 28.228209, 112.938814);
-              }
-            }
-          });
+          degrade();
         }
       });
     });
@@ -164,6 +173,19 @@ Page({
     store.savePlaces(places);
     this.setData({ answers });
     this.showQuestion(this.data.current + 1);
+  },
+
+  // 用 wx.getLocation 获取当前位置（模拟器可用），作为地图选点的降级路径
+  getCurrentLocation(key, answers) {
+    wx.getLocation({
+      type: 'gcj02',
+      success: (res) => {
+        this.createPlaceWithCoords(key, answers, '当前位置（模拟器定位）', res.latitude, res.longitude);
+      },
+      fail: () => {
+        this.createPlaceWithCoords(key, answers, '演示位置（长沙，可删除）', 28.228209, 112.938814);
+      }
+    });
   },
 
   // 检查并请求定位授权
