@@ -41,7 +41,7 @@
     </view>
     <button class="btn-primary" bindtap="onCheckAll" wx:if="{{items.length && !editMode}}">全部确认已带</button>
     <view class="add-row" wx:if="{{editMode}}">
-      <input class="add-input" placeholder="添加要带的物品" value="{{newItem}}" bindinput="onNewItemInput" confirm-type="done" bindconfirm="onAddItem" />
+      <input class="add-input" placeholder="添加要带的物品" placeholder-class="add-input-ph" value="{{newItem}}" bindinput="onNewItemInput" confirm-type="done" bindconfirm="onAddItem" />
       <button class="btn-primary add-btn" bindtap="onAddItem">添加</button>
     </view>
   </view>
