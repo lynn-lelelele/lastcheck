@@ -26,7 +26,7 @@ Page({
       fail: () => {
         wx.showModal({
           title: '需要定位权限',
-          content: '关闭后无法自动触发出门提醒，可在「手动打卡」模式继续使用。',
+          content: '关闭后无法自动触发出门提醒，仍可自己查看和确认清单。',
           showCancel: false
         });
       }

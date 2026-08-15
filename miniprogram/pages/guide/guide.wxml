@@ -5,7 +5,7 @@
       <view class="logo">LastCheck</view>
       <view class="slogan">离开常去的地方前，替你盯住要带的东西</view>
     </view>
-    <button class="btn-primary start-btn" bindtap="onStart">开始配置（约 1 分钟）</button>
+    <button class="btn-primary start-btn" bindtap="onStart">开始使用</button>
   </block>
 
   <!-- 问卷页 -->
@@ -31,11 +31,10 @@
   <!-- 完成页 -->
   <block wx:else>
     <view class="hero">
-      <view class="logo done">配置完成</view>
+      <view class="logo done">准备好了</view>
       <view class="slogan">{{summary}}</view>
     </view>
     <button class="btn-primary start-btn" bindtap="onDone">开始使用</button>
   </block>
 
-  <view class="build">build {{build}}</view>
 </view>

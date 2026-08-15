@@ -38,10 +38,10 @@ Page({
 
   chooseLocationMethod(name, items) {
     wx.showActionSheet({
-      itemList: ['地图选点', '用演示位置'],
+      itemList: ['地图选点', '用示例位置'],
       success: (r) => {
         if (r.tapIndex === 1) {
-          this.addPlaceWithCoords(name, '演示位置（长沙，可删除）', 28.228209, 112.938814, items);
+          this.addPlaceWithCoords(name, '示例位置（稍后可修改）', 28.228209, 112.938814, items);
           return;
         }
         this.tryMapPick(name, items);
@@ -65,9 +65,9 @@ Page({
       wx.hideLoading();
       wx.showModal({
         title: '地图不可用',
-        content: '当前环境无法打开地图，可用演示位置创建地点，之后可修改或删除。',
-        confirmText: '用演示位置',
-        success: () => this.addPlaceWithCoords(name, '演示位置（长沙，可删除）', 28.228209, 112.938814, items)
+        content: '当前环境无法打开地图，可用示例位置创建地点，之后可修改或删除。',
+        confirmText: '用示例位置',
+        success: () => this.addPlaceWithCoords(name, '示例位置（稍后可修改）', 28.228209, 112.938814, items)
       });
     };
     setTimeout(useDemo, 8000);

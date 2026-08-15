@@ -5,7 +5,7 @@
       <text>{{locationAuthorized ? '已授权' : '未授权'}}</text>
       <button class="btn-primary small" bindtap="onRequestAuth" wx:if="{{!locationAuthorized}}">去授权</button>
     </view>
-    <view class="muted">授权后，离开地点时将自动触发出门清单提醒。关闭权限仍可手动打卡。</view>
+    <view class="muted">授权后，离开地点时将自动触发出门清单提醒。关闭权限也能正常查看和确认清单。</view>
   </view>
 
   <view class="card">
@@ -15,9 +15,9 @@
   </view>
 
   <view class="card">
-    <view class="card-title">演示</view>
-    <view class="muted">正式版检测到您离开常去地点时会自动提醒。当前环境无后台定位，可用此按钮模拟触发。</view>
-    <button class="btn-primary" bindtap="onDemoRemind">模拟出门提醒</button>
+    <view class="card-title">体验</view>
+    <view class="muted">正式版检测到您离开常去地点时会自动提醒。当前环境无后台定位，可用此按钮体验提醒效果。</view>
+    <button class="btn-primary" bindtap="onDemoRemind">试试出门提醒</button>
   </view>
 
   <view class="card">

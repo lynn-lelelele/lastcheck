@@ -39,7 +39,7 @@ const QUESTIONS = [
     title: '要不要开启自动提醒？',
     options: [
       { key: 'on', label: '开启：离开常去地点时自动提醒（推荐）' },
-      { key: 'off', label: '暂不开启：先手动打卡' }
+      { key: 'off', label: '暂不开启' }
     ]
   }
 ];
@@ -109,10 +109,10 @@ Page({
   // 保证任何环境下点「家」都有即时反馈。
   pickScene(key, answers) {
     wx.showActionSheet({
-      itemList: ['地图选点', '用演示位置'],
+      itemList: ['地图选点', '用示例位置'],
       success: (r) => {
         if (r.tapIndex === 1) {
-          this.createPlaceWithCoords(key, answers, '演示位置（长沙，可删除）', 28.228209, 112.938814);
+          this.createPlaceWithCoords(key, answers, '示例位置（稍后可修改）', 28.228209, 112.938814);
           return;
         }
         this.tryMapPick(key, answers);
@@ -121,12 +121,12 @@ Page({
         // 取消选择：弹确认，避免误触导致地点缺失
         wx.showModal({
           title: '未选择获取方式',
-          content: '可用演示位置创建地点，之后可在「地点」页修改或删除。',
-          confirmText: '用演示位置',
+          content: '可用示例位置创建地点，之后可在「地点」页修改或删除。',
+          confirmText: '用示例位置',
           cancelText: '跳过',
           success: (r) => {
             if (r.confirm) {
-              this.createPlaceWithCoords(key, answers, '演示位置（长沙，可删除）', 28.228209, 112.938814);
+              this.createPlaceWithCoords(key, answers, '示例位置（稍后可修改）', 28.228209, 112.938814);
             } else {
               this.setData({ answers });
               this.showQuestion(this.data.current + 1);
@@ -155,10 +155,10 @@ Page({
       wx.hideLoading();
       wx.showModal({
         title: '地图不可用',
-        content: '当前为演示模式，已用演示位置创建地点。正式环境（登录工具或真机）会正常使用地图选点。',
+        content: '当前为演示模式，已用示例位置创建地点。正式环境（登录工具或真机）会正常使用地图选点。',
         confirmText: '知道了',
         success: () => {
-          this.createPlaceWithCoords(key, answers, '演示位置（长沙，可删除）', 28.228209, 112.938814);
+          this.createPlaceWithCoords(key, answers, '示例位置（稍后可修改）', 28.228209, 112.938814);
         }
       });
     };
@@ -205,7 +205,7 @@ Page({
         if (ok) {
           wx.showToast({ title: '提醒已开启', icon: 'success' });
         } else {
-          wx.showToast({ title: '当前环境暂无法开启推送', icon: 'none' });
+          wx.showToast({ title: '当前环境暂不支持推送提醒', icon: 'none' });
         }
       });
       wx.authorize({
@@ -213,7 +213,7 @@ Page({
         fail: () => {
           wx.showModal({
             title: '定位未授权',
-            content: '之后可在「设置」页开启，未开启时使用手动打卡。',
+            content: '之后可在「设置」页开启，未开启时，出门前自己核对清单就好。',
             showCancel: false
           });
         }
@@ -224,7 +224,7 @@ Page({
     const places = placeService.list();
     if (places.length) {
       const place = places[places.length - 1];
-      this.setData({ summary: '已为你准备「' + place.name + '」的出门清单（' + place.items.length + ' 件物品），定位提醒已按你的选择配置。' });
+      this.setData({ summary: '已为你准备「' + place.name + '」的出门清单（' + place.items.length + ' 件物品），离开时会自动提醒你。' });
     } else {
       this.setData({ summary: '已记录你的偏好：' + this.sceneLabel(answers[0]) + '。地点定位未完成，可稍后在「地点」页补充。' });
     }
