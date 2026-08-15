@@ -1,3 +1,13 @@
+.debug-bar {
+  background: #2a2a2a;
+  color: #e0e0e0;
+  font-size: 20rpx;
+  padding: 8rpx 16rpx;
+  border-radius: 12rpx;
+  margin-bottom: 16rpx;
+  word-break: break-all;
+}
+
 .place-list {
   display: flex;
   flex-wrap: wrap;
@@ -5,34 +15,43 @@
 
 .place-item {
   padding: 12rpx 28rpx;
-  border: 2rpx solid #d9d9d9;
+  border: 3rpx solid #e5e5e5;
   border-radius: 999rpx;
   margin: 0 16rpx 16rpx 0;
   font-size: 26rpx;
+  font-weight: 700;
+  color: #4b4b4b;
+  background: #ffffff;
 }
 
 .place-item.active {
-  background: #1f1f1f;
+  background: #58cc02;
   color: #ffffff;
-  border-color: #1f1f1f;
+  border-color: #58cc02;
+  box-shadow: 0 3rpx 0 #46a302;
 }
 
 .item {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 24rpx 0;
-  border-bottom: 2rpx solid #f0f0f0;
+  padding: 26rpx 0;
+  border-bottom: 3rpx solid #f0f0f0;
 }
 
 .item.done .item-name {
   text-decoration: line-through;
-  color: #8a8a8a;
+  color: #58cc02;
 }
 
 .item-status {
   font-size: 24rpx;
-  color: #8a8a8a;
+  font-weight: 800;
+  color: #bdbdbd;
+}
+
+.item.done .item-status {
+  color: #58cc02;
 }
 
 .leave-btn {
@@ -42,44 +61,38 @@
 .leave-tip {
   font-size: 26rpx;
   margin-bottom: 8rpx;
+  color: #4b4b4b;
 }
 
 .trigger-info {
-  color: #c0392b;
+  color: #ff4b4b;
   font-size: 28rpx;
-  font-weight: 600;
+  font-weight: 800;
 }
 
 .trigger-info.ok {
-  color: #2e7d32;
+  color: #58cc02;
 }
-.debug-bar {
-  background: #2a2a2a;
-  color: #e0e0e0;
-  font-size: 20rpx;
-  padding: 8rpx 16rpx;
-  border-radius: 8rpx;
-  margin-bottom: 16rpx;
-  word-break: break-all;
-}
+
 .btn-primary.ghost {
   background: #ffffff;
-  color: #1f1f1f;
-  border: 2rpx solid #1f1f1f;
-  margin-top: 16rpx;
+  color: #1cb0f6;
+  border: 3rpx solid #1cb0f6;
+  box-shadow: 0 3rpx 0 #0e8fc9;
 }
+
 .mock-notif {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   z-index: 999;
-  background: #1f1f1f;
+  background: #58cc02;
   color: #ffffff;
   padding: 24rpx 32rpx;
   transform: translateY(-120%);
   transition: transform 0.25s ease;
-  box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.25);
+  box-shadow: 0 6rpx 20rpx rgba(70, 163, 2, 0.4);
 }
 
 .mock-notif.show {
@@ -88,11 +101,12 @@
 
 .mock-notif-title {
   font-size: 26rpx;
-  color: #bdbdbd;
+  font-weight: 800;
+  opacity: 0.9;
 }
 
 .mock-notif-content {
   margin-top: 6rpx;
   font-size: 28rpx;
-  font-weight: 600;
+  font-weight: 800;
 }

@@ -5,12 +5,17 @@
       <view class="logo">LastCheck</view>
       <view class="slogan">离开场所前，替你盯住要带的东西</view>
     </view>
-    <button class="start-btn" bindtap="onStart">开始配置（约 1 分钟）</button>
+    <button class="btn-primary start-btn" bindtap="onStart">开始配置（约 1 分钟）</button>
   </block>
 
   <!-- 问卷页 -->
   <block wx:elif="{{phase === 'question'}}">
-    <view class="progress">第 {{current + 1}} / {{total}} 步</view>
+    <view class="progress-row">
+      <view class="progress-track">
+        <view class="progress-fill" style="width: {{(current + 1) / total * 100}}%"></view>
+      </view>
+      <view class="progress-text">{{current + 1}} / {{total}}</view>
+    </view>
     <view class="q-title">{{question.title}}</view>
     <view class="options">
       <view
@@ -26,10 +31,11 @@
   <!-- 完成页 -->
   <block wx:else>
     <view class="hero">
-      <view class="logo">配置完成</view>
+      <view class="logo done">配置完成</view>
       <view class="slogan">{{summary}}</view>
     </view>
-    <button class="start-btn" bindtap="onDone">开始使用</button>
+    <button class="btn-primary start-btn" bindtap="onDone">开始使用</button>
   </block>
+
+  <view class="build">build {{build}}</view>
 </view>
-<view class="build">build {{build}}</view>

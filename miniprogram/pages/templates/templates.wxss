@@ -5,12 +5,13 @@
 }
 
 .tag {
-  background: #f0f0f0;
-  border-radius: 8rpx;
-  padding: 6rpx 16rpx;
+  background: #d7ffb8;
+  color: #46a302;
+  border-radius: 999rpx;
+  padding: 8rpx 20rpx;
   margin: 0 12rpx 12rpx 0;
   font-size: 24rpx;
-  color: #555;
+  font-weight: 700;
 }
 
 .apply-btn {

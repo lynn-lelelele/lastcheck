@@ -1,7 +1,7 @@
 .guide {
   min-height: 100vh;
-  background: #1f1f1f;
-  color: #ffffff;
+  background: #ffffff;
+  color: #4b4b4b;
   padding: 96rpx 48rpx 64rpx;
   box-sizing: border-box;
   display: flex;
@@ -16,59 +16,84 @@
 }
 
 .logo {
-  font-size: 64rpx;
-  font-weight: 700;
+  font-size: 72rpx;
+  font-weight: 800;
+  color: #58cc02;
   letter-spacing: 2rpx;
+}
+
+.logo.done {
+  color: #4b4b4b;
 }
 
 .slogan {
   margin-top: 24rpx;
   font-size: 30rpx;
-  color: #bdbdbd;
+  color: #8a8a8a;
   line-height: 1.7;
 }
 
-.progress {
-  font-size: 24rpx;
-  color: #8a8a8a;
+.progress-row {
+  display: flex;
+  align-items: center;
   margin-bottom: 48rpx;
+}
+
+.progress-track {
+  flex: 1;
+  height: 18rpx;
+  background: #e5e5e5;
+  border-radius: 999rpx;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: #58cc02;
+  border-radius: 999rpx;
+  transition: width 0.3s ease;
+}
+
+.progress-text {
+  margin-left: 20rpx;
+  font-size: 26rpx;
+  font-weight: 800;
+  color: #4b4b4b;
 }
 
 .q-title {
   font-size: 44rpx;
-  font-weight: 600;
+  font-weight: 800;
   line-height: 1.5;
   margin-bottom: 48rpx;
+  color: #4b4b4b;
 }
 
 .option {
-  background: #2a2a2a;
-  border: 2rpx solid #3d3d3d;
-  border-radius: 12rpx;
+  background: #ffffff;
+  border: 3rpx solid #e5e5e5;
+  border-radius: 20rpx;
   padding: 32rpx;
   margin-bottom: 24rpx;
-  font-size: 30rpx;
+  font-size: 32rpx;
+  font-weight: 700;
+  color: #4b4b4b;
+  box-shadow: 0 3rpx 0 #d9d9d9;
 }
 
 .option:active {
-  background: #333333;
+  background: #f0ffe6;
+  border-color: #58cc02;
+  transform: translateY(2rpx);
 }
 
 .start-btn {
-  background: #ffffff;
-  color: #1f1f1f;
-  border-radius: 12rpx;
-  font-size: 32rpx;
-  font-weight: 600;
   margin-top: 48rpx;
 }
 
-.start-btn::after {
-  border: none;
-}
 .build {
   margin-top: 32rpx;
   text-align: center;
   font-size: 22rpx;
-  color: #5a5a5a;
+  color: #bdbdbd;
 }
