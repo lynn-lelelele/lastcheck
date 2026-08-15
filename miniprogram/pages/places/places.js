@@ -17,35 +17,49 @@ Page({
     wx.showActionSheet({
       itemList: names,
       success: (r) => {
-        const preset = presets.SCENE_TYPES[r.tapIndex] || { key: 'other', label: '其他', items: [] };
-        this.chooseLocationMethod(preset);
+        const preset = presets.SCENE_TYPES[r.tapIndex];
+        if (preset) {
+          this.chooseLocationMethod(preset.label, preset.items);
+        } else {
+          // 其他：让用户自定义名称
+          wx.showModal({
+            title: '地点名称',
+            editable: true,
+            placeholderText: '如：图书馆、学校、医院',
+            success: (res) => {
+              if (!res.confirm) return;
+              const name = (res.content || '').trim() || '其他';
+              this.chooseLocationMethod(name, []);
+            }
+          });
+        }
       },
       fail: () => {}
     });
   },
 
-  chooseLocationMethod(preset) {
+  chooseLocationMethod(name, items) {
     wx.showActionSheet({
       itemList: ['地图选点', '用演示位置'],
       success: (r) => {
         if (r.tapIndex === 1) {
-          this.addPlaceWithCoords(preset.label, '演示位置（长沙，可删除）', 28.228209, 112.938814, preset.items);
+          this.addPlaceWithCoords(name, '演示位置（长沙，可删除）', 28.228209, 112.938814, items);
           return;
         }
-        this.tryMapPick(preset);
+        this.tryMapPick(name, items);
       },
       fail: () => {}
     });
   },
 
-  tryMapPick(preset) {
+  tryMapPick(name, items) {
     wx.showLoading({ title: '正在获取位置…', mask: true });
     let settled = false;
-    const finish = (name, address, latitude, longitude) => {
+    const finish = (n, address, latitude, longitude) => {
       if (settled) return;
       settled = true;
       wx.hideLoading();
-      this.addPlaceWithCoords(name, address, latitude, longitude, preset.items);
+      this.addPlaceWithCoords(n, address, latitude, longitude, items);
     };
     const useDemo = () => {
       if (settled) return;
@@ -55,13 +69,13 @@ Page({
         title: '地图不可用',
         content: '当前环境无法打开地图，可用演示位置创建地点，之后可修改或删除。',
         confirmText: '用演示位置',
-        success: () => this.addPlaceWithCoords(preset.label, '演示位置（长沙，可删除）', 28.228209, 112.938814, preset.items)
+        success: () => this.addPlaceWithCoords(name, '演示位置（长沙，可删除）', 28.228209, 112.938814, items)
       });
     };
     setTimeout(useDemo, 8000);
     wx.chooseLocation({
       success: (res) => {
-        finish(res.name || preset.label, res.address || '', res.latitude, res.longitude);
+        finish(res.name || name, res.address || '', res.latitude, res.longitude);
       },
       fail: () => useDemo()
     });
@@ -106,7 +120,7 @@ Page({
     wx.showModal({
       title: '删除地点',
       content: '删除后这里对应的清单也会一并移除。',
-      confirmColor: '#c0392b',
+      confirmColor: '#a25e4c',
       success: (res) => {
         if (!res.confirm) return;
         const places = store.getPlaces().filter(p => p.id !== id);

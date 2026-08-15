@@ -22,7 +22,7 @@ const QUESTIONS = [
       { key: 'home', label: '家' },
       { key: 'office', label: '公司' },
       { key: 'gym', label: '健身房' },
-      { key: 'other', label: '其他地点' }
+      { key: 'other', label: '其他' }
     ]
   },
   {
@@ -83,7 +83,21 @@ Page({
     const answers = this.data.answers.concat([key]);
 
     if (id === 'scene') {
-      this.pickScene(key, answers);
+      if (key === 'other') {
+        // 自定义地点：先让用户输入名称
+        wx.showModal({
+          title: '地点名称',
+          editable: true,
+          placeholderText: '如：图书馆、学校、医院',
+          success: (res) => {
+            const name = (res.content || '').trim();
+            this.customSceneName = name || '其他';
+            this.pickScene(key, answers);
+          }
+        });
+      } else {
+        this.pickScene(key, answers);
+      }
     } else if (id === 'focus') {
       this.pickFocus(key, answers);
     } else {
@@ -224,6 +238,9 @@ Page({
   },
 
   sceneLabel(key) {
+    if (key === 'other' && this.customSceneName) {
+      return this.customSceneName;
+    }
     const q = QUESTIONS[0];
     const opt = q.options.find(o => o.key === key);
     return opt ? opt.label : '地点';
