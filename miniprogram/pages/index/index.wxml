@@ -7,9 +7,8 @@
   <view class="mock-notif-title">{{mockNotif.title}}</view>
   <view class="mock-notif-content">{{mockNotif.content}}</view>
 </view>
-  <view class="card" wx:if="{{places.length}}">
-    <view class="card-title">当前场所</view>
-    <view class="place-list">
+  <view class="card" wx:if="{{currentPlace}}">
+    <view class="place-list" wx:if="{{places.length > 1}}">
       <view
         wx:for="{{places}}"
         wx:key="id"
@@ -18,9 +17,6 @@
         bindtap="onSwitchPlace"
       >{{item.name}}</view>
     </view>
-  </view>
-
-  <view class="card" wx:if="{{currentPlace}}">
     <view class="card-title">出门清单</view>
     <view wx:if="{{items.length === 0}}" class="muted">该场所还没有物品。</view>
     <button class="btn-primary ghost" wx:if="{{items.length === 0}}" bindtap="goTemplates">看看常用清单</button>
