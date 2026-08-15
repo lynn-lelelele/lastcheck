@@ -42,6 +42,8 @@ Page({
         target.items = tpl.items.slice();
         target.checkedMap = {};
         store.savePlaces(places);
+        // 把当前场所切到被套用的场所，保证清单页直接看到效果
+        wx.setStorageSync('lastcheck_current_place_id', target.id);
         wx.showToast({ title: '已套用到「' + target.name + '」', icon: 'success' });
         setTimeout(() => {
           wx.switchTab({ url: '/pages/index/index' });
