@@ -1,10 +1,10 @@
-// 地理围栏工具：基于 Haversine 公式计算球面距离，判断是否离开围栏。
+// 地理围栏纯逻辑：基于 Haversine 公式计算球面距离，判定是否离开围栏。
+// 纯函数，可脱离小程序环境单测。
 
 function toRadians(deg) {
   return (deg * Math.PI) / 180;
 }
 
-// 计算两个经纬度点的距离（米）
 function distanceMeters(lat1, lng1, lat2, lng2) {
   const R = 6371000;
   const dLat = toRadians(lat2 - lat1);
@@ -19,16 +19,12 @@ function distanceMeters(lat1, lng1, lat2, lng2) {
   return R * c;
 }
 
-// 是否位于地点围栏内（place: {latitude, longitude, radius}）
+// 是否位于围栏内（place: {latitude, longitude, radius}）
 function isInside(place, lat, lng) {
   if (!place || typeof lat !== 'number' || typeof lng !== 'number') {
     return false;
   }
-  const dist = distanceMeters(place.latitude, place.longitude, lat, lng);
-  return dist <= place.radius;
+  return distanceMeters(place.latitude, place.longitude, lat, lng) <= place.radius;
 }
 
-module.exports = {
-  distanceMeters,
-  isInside
-};
+module.exports = { distanceMeters, isInside };

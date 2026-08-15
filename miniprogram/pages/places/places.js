@@ -1,5 +1,5 @@
-const store = require('../../utils/store');
-const presets = require('../../utils/presets');
+const placeService = require('../../services/placeService');
+const presets = require('../../data/presets');
 
 Page({
   data: {
@@ -8,10 +8,9 @@ Page({
 
   onShow() {
     console.log('[LastCheck] places onShow');
-    this.setData({ places: store.getPlaces() });
+    this.setData({ places: placeService.list() });
   },
 
-  // 添加常去的地方：先选类型（自动带常用物品），再选位置方式
   onAddPlace() {
     const names = presets.SCENE_TYPES.map(s => s.label).concat(['其他']);
     wx.showActionSheet({
@@ -21,7 +20,6 @@ Page({
         if (preset) {
           this.chooseLocationMethod(preset.label, preset.items);
         } else {
-          // 其他：让用户自定义名称
           wx.showModal({
             title: '地点名称',
             editable: true,
@@ -82,35 +80,27 @@ Page({
   },
 
   addPlaceWithCoords(name, address, latitude, longitude, items) {
-    const places = store.getPlaces();
-    places.push({
+    placeService.add({
       id: 'p_' + Date.now(),
       name: name || '新地点',
       address: address || '',
       latitude: latitude,
       longitude: longitude,
-      radius: 100,
-      items: items || [],
-      checkedMap: {}
+      items: items || []
     });
-    store.savePlaces(places);
-    this.setData({ places });
+    this.setData({ places: placeService.list() });
     wx.showToast({ title: '已添加', icon: 'success' });
   },
 
   onEditRadius(e) {
     const id = e.currentTarget.dataset.id;
-    const places = store.getPlaces();
-    const place = places.find(p => p.id === id);
-    if (!place) return;
     const options = ['50 米', '100 米', '200 米', '300 米', '500 米'];
     const radiusMap = [50, 100, 200, 300, 500];
     wx.showActionSheet({
       itemList: options,
       success: (res) => {
-        place.radius = radiusMap[res.tapIndex];
-        store.savePlaces(places);
-        this.setData({ places });
+        placeService.update(id, { radius: radiusMap[res.tapIndex] });
+        this.setData({ places: placeService.list() });
       }
     });
   },
@@ -123,9 +113,8 @@ Page({
       confirmColor: '#a25e4c',
       success: (res) => {
         if (!res.confirm) return;
-        const places = store.getPlaces().filter(p => p.id !== id);
-        store.savePlaces(places);
-        this.setData({ places });
+        placeService.remove(id);
+        this.setData({ places: placeService.list() });
       }
     });
   }

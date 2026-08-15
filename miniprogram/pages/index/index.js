@@ -1,5 +1,6 @@
-const store = require('../../utils/store');
-const msg = require('../../utils/message');
+const placeService = require('../../services/placeService');
+const checklistService = require('../../services/checklistService');
+const messageService = require('../../services/messageService');
 
 Page({
   data: {
@@ -18,7 +19,6 @@ Page({
   },
 
   onLoad() {
-    // M1-3: 首次进入引导定位授权（游客模式可跳过，不影响本地功能）
     wx.getSetting({
       success: (res) => {
         if (res.authSetting['scope.userLocation'] === false) {
@@ -45,32 +45,33 @@ Page({
       wx.removeStorageSync('lastcheck_demo_trigger');
       this.onManualLeave();
     }
-    const places = store.getPlaces();
-    let currentPlaceId = wx.getStorageSync('lastcheck_current_place_id') || '';
+    const places = placeService.list();
     if (places.length === 0) {
-      this.setData({ places: [], currentPlace: null, items: [], triggerInfo: '', triggerOk: false, showLeaveCard: false });
+      this.setData({ places: [], currentPlace: null, items: [], triggerInfo: '', triggerOk: false, showLeaveCard: false, editMode: false });
       return;
     }
+    let currentPlaceId = placeService.getCurrentPlaceId();
     if (!places.some(p => p.id === currentPlaceId)) {
       currentPlaceId = places[0].id;
-      wx.setStorageSync('lastcheck_current_place_id', currentPlaceId);
+      placeService.setCurrentPlaceId(currentPlaceId);
     }
-    const currentPlace = places.find(p => p.id === currentPlaceId);
+    const currentPlace = placeService.findById(currentPlaceId);
+    const cl = checklistService.getChecklist(currentPlaceId);
     this.setData({
       places,
       currentPlaceId,
       currentPlace,
-      items: currentPlace.items || [],
-      checkedMap: currentPlace.checkedMap || {},
+      items: cl.items,
+      checkedMap: cl.checkedMap,
       triggerInfo: '',
       triggerOk: false,
-      showLeaveCard: false
+      showLeaveCard: false,
+      editMode: false
     });
   },
 
   onSwitchPlace(e) {
-    const id = e.currentTarget.dataset.id;
-    wx.setStorageSync('lastcheck_current_place_id', id);
+    placeService.setCurrentPlaceId(e.currentTarget.dataset.id);
     this.onShow();
   },
 
@@ -84,7 +85,6 @@ Page({
     this.tapFeedback();
   },
 
-  // 轻触反馈：勾选物品时轻微震动
   tapFeedback() {
     if (wx.vibrateShort) {
       wx.vibrateShort({ type: 'light' });
@@ -103,7 +103,6 @@ Page({
     this.celebrate();
   },
 
-  // 全部带齐时的庆祝动效
   celebrate() {
     this.setData({ celebration: true });
     setTimeout(() => {
@@ -111,7 +110,6 @@ Page({
     }, 1500);
   },
 
-  // M1-6: 手动出门打卡，验证「提醒 → 确认」交互闭环
   onManualLeave() {
     if (!this.data.currentPlace) return;
     this.setData({ showLeaveCard: true, triggerInfo: '', triggerOk: false });
@@ -119,11 +117,10 @@ Page({
     this.showMockNotification();
   },
 
-  // 模拟系统通知横幅：游客模式下体验推送效果，正式环境由订阅消息替代
   showMockNotification() {
     const place = this.data.currentPlace;
     const pending = this.data.items.filter((_, i) => !this.data.checkedMap[i]);
-    const content = msg.buildLeaveMessage(place, pending);
+    const content = messageService.buildLeaveMessage(place, pending);
     this.setData({ mockNotif: { visible: true, title: '出门清单', content } });
     if (wx.vibrateShort) {
       wx.vibrateShort({ type: 'heavy' });
@@ -143,19 +140,13 @@ Page({
     } else if (pending.length === 0) {
       this.setData({ triggerInfo: '全部确认已带，可以安心出门。', triggerOk: true });
     } else {
-      const names = pending.map((_, i) => {
-        return items[i];
-      });
+      const names = pending.map((_, i) => items[i]);
       this.setData({ triggerInfo: '还有未确认：' + names.join('、'), triggerOk: false });
     }
   },
 
   persist() {
-    const places = store.getPlaces();
-    const idx = places.findIndex(p => p.id === this.data.currentPlaceId);
-    if (idx === -1) return;
-    places[idx].checkedMap = this.data.checkedMap;
-    store.savePlaces(places);
+    checklistService.setCheckedMap(this.data.currentPlaceId, this.data.checkedMap);
   },
 
   onToggleEdit() {
@@ -169,31 +160,17 @@ Page({
   onAddItem() {
     const name = (this.data.newItem || '').trim();
     if (!name) return;
-    const items = this.data.items.concat([name]);
-    const places = store.getPlaces();
-    const idx = places.findIndex(p => p.id === this.data.currentPlaceId);
-    if (idx === -1) return;
-    places[idx].items = items;
-    store.savePlaces(places);
-    this.setData({ items, newItem: '' });
+    const items = checklistService.addItem(this.data.currentPlaceId, name);
+    if (items) {
+      this.setData({ items, newItem: '' });
+    }
   },
 
   onRemoveItem(e) {
-    const i = e.currentTarget.dataset.index;
-    const items = this.data.items.slice();
-    const old = this.data.checkedMap || {};
-    items.splice(i, 1);
-    const checkedMap = {};
-    items.forEach((_, j) => {
-      checkedMap[j] = j < i ? !!old[j] : !!old[j + 1];
-    });
-    const places = store.getPlaces();
-    const idx = places.findIndex(p => p.id === this.data.currentPlaceId);
-    if (idx === -1) return;
-    places[idx].items = items;
-    places[idx].checkedMap = checkedMap;
-    store.savePlaces(places);
-    this.setData({ items, checkedMap });
+    const result = checklistService.removeItem(this.data.currentPlaceId, e.currentTarget.dataset.index);
+    if (result) {
+      this.setData({ items: result.items, checkedMap: result.checkedMap });
+    }
   },
 
   goTemplates() {

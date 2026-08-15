@@ -1,4 +1,4 @@
-const store = require('../../utils/store');
+const placeService = require('../../services/placeService');
 const subscribe = require('../../utils/subscribe');
 
 // 场景 → 默认物品（focus=random 时使用）
@@ -174,31 +174,25 @@ Page({
 
   // 用坐标创建地点（地图/定位/演示位置共用）
   createPlaceWithCoords(key, answers, address, latitude, longitude) {
-    const places = store.getPlaces();
-    places.push({
+    placeService.add({
       id: 'p_' + Date.now(),
       name: this.sceneLabel(key),
       address: address || '',
       latitude: latitude,
       longitude: longitude,
-      radius: 100,
-      items: [],
-      checkedMap: {}
+      items: []
     });
-    store.savePlaces(places);
     this.setData({ answers });
     this.showQuestion(this.data.current + 1);
   },
 
   pickFocus(key, answers) {
-    const places = store.getPlaces();
+    const places = placeService.list();
     if (places.length) {
       const items = key === 'random'
         ? (SCENE_ITEMS[answers[0]] || ['手机', '钱包', '钥匙'])
         : FOCUS_ITEMS[key];
-      places[places.length - 1].items = items;
-      places[places.length - 1].checkedMap = {};
-      store.savePlaces(places);
+      placeService.update(places[places.length - 1].id, { items, checkedMap: {} });
     }
     this.setData({ answers });
     this.showQuestion(this.data.current + 1);
