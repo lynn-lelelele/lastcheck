@@ -1,5 +1,5 @@
 const placeService = require('../../services/placeService');
-const subscribe = require('../../utils/subscribe');
+const subscribe = require('../../services/subscriptionService');
 
 // 场景 → 默认物品（focus=random 时使用）
 const SCENE_ITEMS = {

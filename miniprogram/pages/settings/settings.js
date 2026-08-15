@@ -1,4 +1,3 @@
-const store = require('../../utils/store');
 
 Page({
   data: {
