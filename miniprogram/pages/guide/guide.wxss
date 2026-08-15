@@ -51,6 +51,7 @@
   height: 100%;
   background: #58cc02;
   border-radius: 999rpx;
+  transition: width 0.3s ease;
 }
 
 .progress-text {
@@ -83,6 +84,7 @@
 .option:active {
   background: #f0ffe6;
   border-color: #58cc02;
+  transform: translateY(2rpx);
 }
 
 .start-btn {
