@@ -1,4 +1,5 @@
 const store = require('../../utils/store');
+const msg = require('../../utils/message');
 
 Page({
   data: {
@@ -115,9 +116,7 @@ Page({
   showMockNotification() {
     const place = this.data.currentPlace;
     const pending = this.data.items.filter((_, i) => !this.data.checkedMap[i]);
-    const content = pending.length
-      ? '离开「' + place.name + '」前请确认：' + pending.join('、')
-      : '离开「' + place.name + '」前请确认携带物品';
+    const content = msg.buildLeaveMessage(place, pending);
     this.setData({ mockNotif: { visible: true, title: '出门清单', content } });
     if (wx.vibrateShort) {
       wx.vibrateShort({ type: 'heavy' });

@@ -30,9 +30,12 @@
       class="item {{checkedMap[index] ? 'done' : ''}}"
       data-index="{{index}}"
       bindtap="onToggleItem"
+      style="animation-delay: {{index * 40}}ms"
     >
       <text class="item-name">{{item}}</text>
-      <text class="item-status">{{checkedMap[index] ? '已带' : '未确认'}}</text>
+      <view class="check-dot {{checkedMap[index] ? 'checked' : ''}}">
+        <text class="check-mark" wx:if="{{checkedMap[index]}}">✓</text>
+      </view>
     </view>
     <button class="btn-primary" bindtap="onCheckAll" wx:if="{{items.length}}">全部确认已带</button>
   </view>
@@ -47,10 +50,11 @@
     <view class="trigger-info {{triggerOk ? 'ok' : ''}}">{{triggerInfo}}</view>
   </view>
 
-  <view class="card" wx:if="{{!currentPlace}}">
+  <view class="card empty-card" wx:if="{{!currentPlace}}">
+    <image class="empty-icon" src="/images/tab/checklist.png" mode="aspectFit"></image>
     <view class="card-title">还没有场所</view>
-    <view class="muted">先去「场所」添加家或公司，再到「常用」选用一份清单。</view>
-    <button class="btn-primary" bindtap="goPlaces">去添加场所</button>
-    <button class="btn-primary ghost" bindtap="goTemplates">看看常用清单</button>
+    <view class="muted">添加家或公司，再到「常用」选用一份出门清单。</view>
+    <button class="btn-primary" bindtap="goPlaces">添加场所</button>
+    <button class="btn-secondary" bindtap="goTemplates">看看常用清单</button>
   </view>
 </view>

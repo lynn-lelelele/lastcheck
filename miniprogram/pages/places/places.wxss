@@ -28,3 +28,14 @@
   font-size: 26rpx;
   font-weight: 800;
 }
+.empty-card {
+  text-align: center;
+}
+
+.empty-icon {
+  width: 120rpx;
+  height: 120rpx;
+  margin: 0 auto 16rpx;
+  display: block;
+  opacity: 0.55;
+}

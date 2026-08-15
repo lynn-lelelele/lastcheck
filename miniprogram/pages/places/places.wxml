@@ -13,7 +13,9 @@
     <view class="remove" data-id="{{item.id}}" bindtap="onRemovePlace">删除</view>
   </view>
 
-  <view class="card" wx:if="{{places.length === 0}}">
-    <view class="muted">还没有场所。点击上方按钮，选择家或公司所在位置。</view>
+  <view class="card empty-card" wx:if="{{places.length === 0}}">
+    <image class="empty-icon" src="/images/tab/place.png" mode="aspectFit"></image>
+    <view class="card-title">还没有场所</view>
+    <view class="muted">添加家或公司，出门时它会在你离开时提醒你。</view>
   </view>
 </view>
