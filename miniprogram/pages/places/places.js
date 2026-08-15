@@ -10,31 +10,65 @@ Page({
     this.setData({ places: store.getPlaces() });
   },
 
+  // 添加场所：先让用户选择获取方式，游客模式下地图不可用也能继续
   onAddPlace() {
+    wx.showActionSheet({
+      itemList: ['地图选点', '用演示位置'],
+      success: (r) => {
+        if (r.tapIndex === 1) {
+          this.addPlaceWithCoords('演示场所', '演示位置（长沙，可删除）', 28.228209, 112.938814);
+          return;
+        }
+        this.tryMapPick();
+      },
+      fail: () => {}
+    });
+  },
+
+  tryMapPick() {
+    wx.showLoading({ title: '正在获取位置…', mask: true });
+    let settled = false;
+    const finish = (name, address, latitude, longitude) => {
+      if (settled) return;
+      settled = true;
+      wx.hideLoading();
+      this.addPlaceWithCoords(name, address, latitude, longitude);
+    };
+    const useDemo = () => {
+      if (settled) return;
+      settled = true;
+      wx.hideLoading();
+      wx.showModal({
+        title: '地图不可用',
+        content: '当前环境无法打开地图，可用演示位置创建场所，之后可修改或删除。',
+        confirmText: '用演示位置',
+        success: () => this.addPlaceWithCoords('演示场所', '演示位置（长沙，可删除）', 28.228209, 112.938814)
+      });
+    };
+    setTimeout(useDemo, 8000);
     wx.chooseLocation({
       success: (res) => {
-        const places = store.getPlaces();
-        const place = {
-          id: 'p_' + Date.now(),
-          name: res.name || res.address || '未命名场所',
-          address: res.address || '',
-          latitude: res.latitude,
-          longitude: res.longitude,
-          radius: 100,
-          items: [],
-          checkedMap: {}
-        };
-        places.push(place);
-        store.savePlaces(places);
-        this.setData({ places });
-        wx.showToast({ title: '已添加', icon: 'success' });
+        finish(res.name || '新场所', res.address || '', res.latitude, res.longitude);
       },
-      fail: (err) => {
-        if (err.errMsg && err.errMsg.indexOf('cancel') === -1) {
-          wx.showToast({ title: '需要定位权限', icon: 'none' });
-        }
-      }
+      fail: () => useDemo()
     });
+  },
+
+  addPlaceWithCoords(name, address, latitude, longitude) {
+    const places = store.getPlaces();
+    places.push({
+      id: 'p_' + Date.now(),
+      name: name || '新场所',
+      address: address || '',
+      latitude: latitude,
+      longitude: longitude,
+      radius: 100,
+      items: [],
+      checkedMap: {}
+    });
+    store.savePlaces(places);
+    this.setData({ places });
+    wx.showToast({ title: '已添加', icon: 'success' });
   },
 
   onEditRadius(e) {
