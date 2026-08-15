@@ -17,7 +17,7 @@
     <view wx:if="{{items.length === 0}}" class="muted">该场所还没有物品，去「模板」套用或到「场所」添加。</view>
     <view
       wx:for="{{items}}"
-      wx:key="index"
+      wx:key="*this"
       class="item {{checkedMap[index] ? 'done' : ''}}"
       data-index="{{index}}"
       bindtap="onToggleItem"
