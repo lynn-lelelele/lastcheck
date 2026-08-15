@@ -7,22 +7,22 @@
     "pages/settings/settings"
   ],
   "window": {
-    "navigationBarBackgroundColor": "#1f1f1f",
+    "navigationBarBackgroundColor": "#58cc02",
     "navigationBarTextStyle": "white",
     "navigationBarTitleText": "LastCheck",
-    "backgroundColor": "#f4f4f4"
+    "backgroundColor": "#ffffff"
   },
   "tabBar": {
     "position": "bottom",
-    "color": "#8a8a8a",
-    "selectedColor": "#1f1f1f",
+    "color": "#a8a8a8",
+    "selectedColor": "#58cc02",
     "backgroundColor": "#ffffff",
-    "borderStyle": "black",
+    "borderStyle": "white",
     "list": [
-      { "pagePath": "pages/index/index", "text": "清单" },
-      { "pagePath": "pages/places/places", "text": "场所" },
-      { "pagePath": "pages/templates/templates", "text": "常用" },
-      { "pagePath": "pages/settings/settings", "text": "设置" }
+      { "pagePath": "pages/index/index", "text": "清单", "iconPath": "images/tab/checklist.png", "selectedIconPath": "images/tab/checklist-active.png" },
+      { "pagePath": "pages/places/places", "text": "场所", "iconPath": "images/tab/place.png", "selectedIconPath": "images/tab/place-active.png" },
+      { "pagePath": "pages/templates/templates", "text": "常用", "iconPath": "images/tab/common.png", "selectedIconPath": "images/tab/common-active.png" },
+      { "pagePath": "pages/settings/settings", "text": "设置", "iconPath": "images/tab/settings.png", "selectedIconPath": "images/tab/settings-active.png" }
     ]
   },
   "requiredBackgroundModes": ["location"],

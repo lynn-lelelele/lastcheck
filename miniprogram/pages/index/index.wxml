@@ -1,3 +1,7 @@
+<view class="celebrate" wx:if="{{celebration}}">
+  <view class="celebrate-badge">✓</view>
+  <view class="celebrate-text">全部带齐</view>
+</view>
 <view class="container">
 <view class="mock-notif {{mockNotif.visible ? 'show' : ''}}">
   <view class="mock-notif-title">{{mockNotif.title}}</view>

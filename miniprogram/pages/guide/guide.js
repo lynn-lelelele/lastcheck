@@ -75,6 +75,9 @@ Page({
   },
 
   onPickOption(e) {
+    if (wx.vibrateShort) {
+      wx.vibrateShort({ type: 'light' });
+    }
     const key = e.currentTarget.dataset.key;
     const id = this.data.question.id;
     const answers = this.data.answers.concat([key]);

@@ -10,7 +10,8 @@ Page({
     triggerInfo: '',
     triggerOk: false,
     showLeaveCard: false,
-    mockNotif: { visible: false, title: '', content: '' }
+    mockNotif: { visible: false, title: '', content: '' },
+    celebration: false
   },
 
   onLoad() {
@@ -72,6 +73,14 @@ Page({
     this.setData({ checkedMap });
     this.persist();
     this.refreshLeaveStatus();
+    this.tapFeedback();
+  },
+
+  // 轻触反馈：勾选物品时轻微震动
+  tapFeedback() {
+    if (wx.vibrateShort) {
+      wx.vibrateShort({ type: 'light' });
+    }
   },
 
   onCheckAll() {
@@ -80,6 +89,18 @@ Page({
     this.setData({ checkedMap });
     this.persist();
     this.refreshLeaveStatus();
+    if (wx.vibrateShort) {
+      wx.vibrateShort({ type: 'heavy' });
+    }
+    this.celebrate();
+  },
+
+  // 全部带齐时的庆祝动效
+  celebrate() {
+    this.setData({ celebration: true });
+    setTimeout(() => {
+      this.setData({ celebration: false });
+    }, 1500);
   },
 
   // M1-6: 手动出门打卡，验证「提醒 → 确认」交互闭环
@@ -99,7 +120,7 @@ Page({
       : '离开「' + place.name + '」前请确认携带物品';
     this.setData({ mockNotif: { visible: true, title: '出门清单', content } });
     if (wx.vibrateShort) {
-      wx.vibrateShort({ type: 'medium' });
+      wx.vibrateShort({ type: 'heavy' });
     }
     setTimeout(() => {
       this.setData({ 'mockNotif.visible': false });
