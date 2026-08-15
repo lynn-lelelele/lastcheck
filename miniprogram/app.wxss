@@ -33,7 +33,6 @@ page {
   font-weight: 800;
   box-shadow: 0 5rpx 0 #46a302;
   margin-top: 16rpx;
-  transition: transform 0.1s ease, box-shadow 0.1s ease;
 }
 
 .btn-primary::after {
@@ -41,7 +40,6 @@ page {
 }
 
 .btn-primary:active {
-  transform: translateY(3rpx) scale(0.98);
   box-shadow: 0 2rpx 0 #46a302;
 }
 

@@ -80,14 +80,9 @@
   background: #58cc02;
   color: #ffffff;
   padding: 24rpx 32rpx;
-  transform: translateY(-120%);
-  transition: transform 0.25s ease;
   box-shadow: 0 6rpx 20rpx rgba(70, 163, 2, 0.4);
 }
 
-.mock-notif.show {
-  transform: translateY(0);
-}
 
 .mock-notif-title {
   font-size: 26rpx;
@@ -123,7 +118,6 @@
   justify-content: center;
   margin: 0 auto;
   box-shadow: 0 8rpx 0 #46a302;
-  animation: pop 0.5s ease;
 }
 
 .celebrate-text {
@@ -133,11 +127,6 @@
   color: #58cc02;
 }
 
-@keyframes pop {
-  0% { transform: scale(0.2); opacity: 0; }
-  60% { transform: scale(1.15); opacity: 1; }
-  100% { transform: scale(1); opacity: 1; }
-}
 .memo-empty {
   width: 220rpx;
   height: 220rpx;
