@@ -13,7 +13,7 @@
     "backgroundColor": "#f4f4f4"
   },
   "tabBar": {
-    "position": "top",
+    "position": "bottom",
     "color": "#8a8a8a",
     "selectedColor": "#1f1f1f",
     "backgroundColor": "#ffffff",

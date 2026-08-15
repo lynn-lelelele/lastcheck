@@ -7,6 +7,7 @@ Page({
   },
 
   onShow() {
+    console.log('[LastCheck] settings onShow');
     wx.getSetting({
       success: (res) => {
         this.setData({

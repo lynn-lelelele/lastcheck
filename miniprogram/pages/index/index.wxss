@@ -53,3 +53,12 @@
 .trigger-info.ok {
   color: #2e7d32;
 }
+.debug-bar {
+  background: #2a2a2a;
+  color: #e0e0e0;
+  font-size: 20rpx;
+  padding: 8rpx 16rpx;
+  border-radius: 8rpx;
+  margin-bottom: 16rpx;
+  word-break: break-all;
+}

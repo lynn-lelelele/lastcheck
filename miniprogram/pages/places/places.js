@@ -6,6 +6,7 @@ Page({
   },
 
   onShow() {
+    console.log('[LastCheck] places onShow');
     this.setData({ places: store.getPlaces() });
   },
 

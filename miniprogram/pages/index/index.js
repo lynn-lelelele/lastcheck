@@ -9,7 +9,8 @@ Page({
     checkedMap: {},
     triggerInfo: '',
     triggerOk: false,
-    showLeaveCard: false
+    showLeaveCard: false,
+    build: 'cfaf591'
   },
 
   onLoad() {
@@ -34,6 +35,7 @@ Page({
   },
 
   onShow() {
+    console.log('[LastCheck] index onShow');
     const places = store.getPlaces();
     let currentPlaceId = wx.getStorageSync('lastcheck_current_place_id') || '';
     if (places.length === 0) {
