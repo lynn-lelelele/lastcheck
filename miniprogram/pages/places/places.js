@@ -115,6 +115,24 @@ Page({
     wx.showToast({ title: '已添加', icon: 'success' });
   },
 
+  // 打开位置：查看并跳转地图 App（高德等）
+  onOpenLocation(e) {
+    const id = e.currentTarget.dataset.id;
+    const place = placeService.findById(id);
+    if (!place) return;
+    if (!wx.openLocation) {
+      wx.showToast({ title: '当前环境不支持打开地图', icon: 'none' });
+      return;
+    }
+    wx.openLocation({
+      latitude: place.latitude,
+      longitude: place.longitude,
+      name: place.name,
+      address: place.address || '',
+      scale: 18
+    });
+  },
+
   onEditRadius(e) {
     const id = e.currentTarget.dataset.id;
     const options = ['50 米', '100 米', '200 米', '300 米', '500 米'];

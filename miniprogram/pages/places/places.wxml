@@ -5,7 +5,7 @@
     <view class="place-row">
       <view>
         <view class="card-title">{{item.name}}</view>
-        <view class="muted">{{item.address}}</view>
+        <view class="muted addr" data-id="{{item.id}}" bindtap="onOpenLocation">{{item.address}} ›</view>
       </view>
       <view class="radius" data-id="{{item.id}}" bindtap="onEditRadius">半径 {{item.radius}}m</view>
     </view>
