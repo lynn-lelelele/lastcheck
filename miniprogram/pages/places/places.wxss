@@ -9,13 +9,13 @@
 }
 
 .radius {
-  color: #1cb0f6;
-  border: 3rpx solid #1cb0f6;
+  color: #b08968;
+  border: 3rpx solid #b08968;
   border-radius: 999rpx;
   padding: 6rpx 20rpx;
   font-size: 24rpx;
   font-weight: 800;
-  background: #ffffff;
+  background: #f7f4ee;
 }
 
 .item-count {
@@ -24,7 +24,7 @@
 
 .remove {
   margin-top: 16rpx;
-  color: #ff4b4b;
+  color: #a25e4c;
   font-size: 26rpx;
   font-weight: 800;
 }

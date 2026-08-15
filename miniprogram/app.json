@@ -7,15 +7,15 @@
     "pages/settings/settings"
   ],
   "window": {
-    "navigationBarBackgroundColor": "#58cc02",
-    "navigationBarTextStyle": "white",
+    "navigationBarBackgroundColor": "#f7f4ee",
+    "navigationBarTextStyle": "black",
     "navigationBarTitleText": "LastCheck",
     "backgroundColor": "#ffffff"
   },
   "tabBar": {
     "position": "bottom",
-    "color": "#a8a8a8",
-    "selectedColor": "#58cc02",
+    "color": "#9a938a",
+    "selectedColor": "#b08968",
     "backgroundColor": "#ffffff",
     "borderStyle": "white",
     "list": [

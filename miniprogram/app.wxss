@@ -1,6 +1,6 @@
 page {
-  background: #ffffff;
-  color: #4b4b4b;
+  background: #f7f4ee;
+  color: #2e2b26;
   font-size: 28rpx;
   line-height: 1.6;
 }
@@ -10,28 +10,28 @@ page {
 }
 
 .card {
-  background: #ffffff;
-  border: 3rpx solid #e5e5e5;
+  background: #f7f4ee;
+  border: 3rpx solid #e8e3d9;
   border-radius: 24rpx;
   padding: 32rpx;
   margin-bottom: 24rpx;
-  box-shadow: 0 4rpx 12rpx rgba(75, 75, 75, 0.08);
+  box-shadow: 0 2rpx 10rpx rgba(46, 43, 38, 0.06);
 }
 
 .card-title {
   font-size: 34rpx;
   font-weight: 800;
-  color: #4b4b4b;
+  color: #2e2b26;
   margin-bottom: 16rpx;
 }
 
 .btn-primary {
-  background: #58cc02;
+  background: #b08968;
   color: #ffffff;
   border-radius: 16rpx;
   font-size: 30rpx;
   font-weight: 800;
-  box-shadow: 0 5rpx 0 #46a302;
+  box-shadow: 0 2rpx 10rpx rgba(46, 43, 38, 0.18);
   margin-top: 16rpx;
   transition: transform 0.1s ease, box-shadow 0.1s ease;
 }
@@ -41,14 +41,14 @@ page {
 }
 
 .btn-primary:active {
-  transform: translateY(3rpx) scale(0.98);
-  box-shadow: 0 2rpx 0 #46a302;
+  opacity: 0.85;
+  box-shadow: 0 2rpx 0 #8a6d4b;
 }
 
 .btn-secondary {
-  background: #ffffff;
-  color: #1cb0f6;
-  border: 3rpx solid #1cb0f6;
+  background: #f7f4ee;
+  color: #b08968;
+  border: 3rpx solid #b08968;
   border-radius: 16rpx;
   font-size: 30rpx;
   font-weight: 800;
@@ -64,6 +64,6 @@ page {
 }
 
 .muted {
-  color: #8a8a8a;
+  color: #8c867b;
   font-size: 26rpx;
 }

@@ -12,7 +12,7 @@
 }
 
 .danger {
-  color: #ff4b4b;
+  color: #a25e4c;
   font-weight: 800;
 }
 

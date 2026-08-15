@@ -5,20 +5,20 @@
 
 .place-item {
   padding: 12rpx 28rpx;
-  border: 3rpx solid #e5e5e5;
+  border: 3rpx solid #e8e3d9;
   border-radius: 999rpx;
   margin: 0 16rpx 16rpx 0;
   font-size: 26rpx;
   font-weight: 700;
-  color: #4b4b4b;
-  background: #ffffff;
+  color: #2e2b26;
+  background: #f7f4ee;
 }
 
 .place-item.active {
-  background: #58cc02;
+  background: #b08968;
   color: #ffffff;
-  border-color: #58cc02;
-  box-shadow: 0 3rpx 0 #46a302;
+  border-color: #b08968;
+  box-shadow: 0 3rpx 0 #8a6d4b;
 }
 
 .item {
@@ -26,22 +26,22 @@
   justify-content: space-between;
   align-items: center;
   padding: 26rpx 0;
-  border-bottom: 3rpx solid #f0f0f0;
+  border-bottom: 3rpx solid #efe9df;
 }
 
 .item.done .item-name {
   text-decoration: line-through;
-  color: #58cc02;
+  color: #b08968;
 }
 
 .item-status {
   font-size: 24rpx;
   font-weight: 800;
-  color: #bdbdbd;
+  color: #a8a29a;
 }
 
 .item.done .item-status {
-  color: #58cc02;
+  color: #b08968;
 }
 
 .leave-btn {
@@ -51,24 +51,24 @@
 .leave-tip {
   font-size: 26rpx;
   margin-bottom: 8rpx;
-  color: #4b4b4b;
+  color: #2e2b26;
 }
 
 .trigger-info {
-  color: #ff4b4b;
+  color: #a25e4c;
   font-size: 28rpx;
   font-weight: 800;
 }
 
 .trigger-info.ok {
-  color: #58cc02;
+  color: #b08968;
 }
 
 .btn-primary.ghost {
-  background: #ffffff;
-  color: #1cb0f6;
-  border: 3rpx solid #1cb0f6;
-  box-shadow: 0 3rpx 0 #0e8fc9;
+  background: #f7f4ee;
+  color: #b08968;
+  border: 3rpx solid #b08968;
+  box-shadow: 0 3rpx 0 #8a6d4b;
 }
 
 .mock-notif {
@@ -77,16 +77,16 @@
   left: 0;
   right: 0;
   z-index: 999;
-  background: #58cc02;
+  background: #b08968;
   color: #ffffff;
   padding: 24rpx 32rpx;
-  transform: translateY(-120%);
-  transition: transform 0.25s ease;
+  opacity: 0;
+  transition: opacity 0.35s ease;
   box-shadow: 0 6rpx 20rpx rgba(70, 163, 2, 0.4);
 }
 
 .mock-notif.show {
-  transform: translateY(0);
+  opacity: 1;
 }
 
 .mock-notif-title {
@@ -114,7 +114,7 @@
   width: 160rpx;
   height: 160rpx;
   border-radius: 50%;
-  background: #58cc02;
+  background: #b08968;
   color: #ffffff;
   font-size: 80rpx;
   font-weight: 800;
@@ -122,19 +122,19 @@
   align-items: center;
   justify-content: center;
   margin: 0 auto;
-  box-shadow: 0 8rpx 0 #46a302;
-  animation: pop 0.5s ease;
+  box-shadow: 0 8rpx 0 #8a6d4b;
+  animation: pop 0.4s ease-out;
 }
 
 .celebrate-text {
   margin-top: 24rpx;
   font-size: 34rpx;
   font-weight: 800;
-  color: #58cc02;
+  color: #b08968;
 }
 
 @keyframes pop {
-  0% { transform: scale(0.2); opacity: 0; }
-  60% { transform: scale(1.15); opacity: 1; }
+  0% { transform: scale(0.9); opacity: 0; }
+  60% { transform: scale(1.03); opacity: 1; }
   100% { transform: scale(1); opacity: 1; }
 }
