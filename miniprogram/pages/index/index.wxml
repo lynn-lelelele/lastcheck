@@ -16,7 +16,7 @@
   <view class="card" wx:if="{{currentPlace}}">
     <view class="card-title">出门清单</view>
     <view wx:if="{{items.length === 0}}" class="muted">该场所还没有物品。</view>
-    <button class="btn-primary ghost" wx:if="{{items.length === 0}}" bindtap="goTemplates">去模板库套用</button>
+    <button class="btn-primary ghost" wx:if="{{items.length === 0}}" bindtap="goTemplates">看看常用清单</button>
     <view
       wx:for="{{items}}"
       wx:key="*this"
@@ -42,8 +42,8 @@
 
   <view class="card" wx:if="{{!currentPlace}}">
     <view class="card-title">还没有场所</view>
-    <view class="muted">先去「场所」添加家或公司，再套用模板生成清单。</view>
+    <view class="muted">先去「场所」添加家或公司，再到「常用」选用一份清单。</view>
     <button class="btn-primary" bindtap="goPlaces">去添加场所</button>
-    <button class="btn-primary ghost" bindtap="goTemplates">先去模板库看看</button>
+    <button class="btn-primary ghost" bindtap="goTemplates">看看常用清单</button>
   </view>
 </view>

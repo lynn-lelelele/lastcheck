@@ -1,4 +1,5 @@
 const store = require('../../utils/store');
+const presets = require('../../utils/presets');
 
 Page({
   data: {
@@ -10,29 +11,41 @@ Page({
     this.setData({ places: store.getPlaces() });
   },
 
-  // 添加场所：先让用户选择获取方式，游客模式下地图不可用也能继续
+  // 添加场所：先选类型（自动带常用物品），再选位置方式
   onAddPlace() {
+    const names = presets.SCENE_TYPES.map(s => s.label).concat(['其他']);
     wx.showActionSheet({
-      itemList: ['地图选点', '用演示位置'],
+      itemList: names,
       success: (r) => {
-        if (r.tapIndex === 1) {
-          this.addPlaceWithCoords('演示场所', '演示位置（长沙，可删除）', 28.228209, 112.938814);
-          return;
-        }
-        this.tryMapPick();
+        const preset = presets.SCENE_TYPES[r.tapIndex] || { key: 'other', label: '其他', items: [] };
+        this.chooseLocationMethod(preset);
       },
       fail: () => {}
     });
   },
 
-  tryMapPick() {
+  chooseLocationMethod(preset) {
+    wx.showActionSheet({
+      itemList: ['地图选点', '用演示位置'],
+      success: (r) => {
+        if (r.tapIndex === 1) {
+          this.addPlaceWithCoords(preset.label, '演示位置（长沙，可删除）', 28.228209, 112.938814, preset.items);
+          return;
+        }
+        this.tryMapPick(preset);
+      },
+      fail: () => {}
+    });
+  },
+
+  tryMapPick(preset) {
     wx.showLoading({ title: '正在获取位置…', mask: true });
     let settled = false;
     const finish = (name, address, latitude, longitude) => {
       if (settled) return;
       settled = true;
       wx.hideLoading();
-      this.addPlaceWithCoords(name, address, latitude, longitude);
+      this.addPlaceWithCoords(name, address, latitude, longitude, preset.items);
     };
     const useDemo = () => {
       if (settled) return;
@@ -42,19 +55,19 @@ Page({
         title: '地图不可用',
         content: '当前环境无法打开地图，可用演示位置创建场所，之后可修改或删除。',
         confirmText: '用演示位置',
-        success: () => this.addPlaceWithCoords('演示场所', '演示位置（长沙，可删除）', 28.228209, 112.938814)
+        success: () => this.addPlaceWithCoords(preset.label, '演示位置（长沙，可删除）', 28.228209, 112.938814, preset.items)
       });
     };
     setTimeout(useDemo, 8000);
     wx.chooseLocation({
       success: (res) => {
-        finish(res.name || '新场所', res.address || '', res.latitude, res.longitude);
+        finish(res.name || preset.label, res.address || '', res.latitude, res.longitude);
       },
       fail: () => useDemo()
     });
   },
 
-  addPlaceWithCoords(name, address, latitude, longitude) {
+  addPlaceWithCoords(name, address, latitude, longitude, items) {
     const places = store.getPlaces();
     places.push({
       id: 'p_' + Date.now(),
@@ -63,7 +76,7 @@ Page({
       latitude: latitude,
       longitude: longitude,
       radius: 100,
-      items: [],
+      items: items || [],
       checkedMap: {}
     });
     store.savePlaces(places);

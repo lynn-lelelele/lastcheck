@@ -95,7 +95,7 @@ Page({
     const checked = this.data.checkedMap;
     const pending = items.filter((_, i) => !checked[i]);
     if (items.length === 0) {
-      this.setData({ triggerInfo: '清单为空，先去模板库套用物品。', triggerOk: false });
+      this.setData({ triggerInfo: '清单为空，可到「常用」选用一份。', triggerOk: false });
     } else if (pending.length === 0) {
       this.setData({ triggerInfo: '全部确认已带，可以安心出门。', triggerOk: true });
     } else {

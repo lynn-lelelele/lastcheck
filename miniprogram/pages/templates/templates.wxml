@@ -1,10 +1,15 @@
 <view class="container">
-  <view class="card" wx:for="{{templates}}" wx:key="id">
-    <view class="card-title">{{item.name}}</view>
+  <view class="card">
+    <view class="card-title">看看出门常带什么</view>
+    <view class="muted">选一份常用清单，用到你的场所，之后再按自己习惯增删。</view>
+  </view>
+
+  <view class="card" wx:for="{{presetsList}}" wx:key="key">
+    <view class="card-title">{{item.label}}</view>
     <view class="tags">
       <text class="tag" wx:for="{{item.items}}" wx:for-item="it" wx:key="*this">{{it}}</text>
     </view>
-    <button class="btn-primary apply-btn" data-id="{{item.id}}" bindtap="onApply">套用到场所</button>
+    <button class="btn-primary apply-btn" data-key="{{item.key}}" bindtap="onUse">用到场所</button>
   </view>
-  <view class="muted note">模板为社区共建内容，欢迎在 GitHub 提交新的场所模板。</view>
+  <view class="muted note">清单内容来自社区共建，欢迎在 GitHub 提交更多场景。</view>
 </view>
