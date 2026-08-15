@@ -30,6 +30,3 @@
 ## License
 
 [MIT](LICENSE)
-## 素材致谢
-
-吉祥物占位素材来自 OpenMoji（CC BY-SA 4.0），详见 [docs/CREDITS.md](docs/CREDITS.md)。

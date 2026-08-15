@@ -1,5 +1,5 @@
 <view class="celebrate" wx:if="{{celebration}}">
-  <image class="celebrate-badge memo-badge" src="/images/memo/memo.png" mode="aspectFit"></image>
+  <view class="celebrate-badge">✓</view>
   <view class="celebrate-text">全部带齐</view>
 </view>
 <view class="container">
@@ -48,7 +48,6 @@
   </view>
 
   <view class="card" wx:if="{{!currentPlace}}">
-    <image class="memo-empty" src="/images/memo/memo.png" mode="aspectFit"></image>
     <view class="card-title">还没有场所</view>
     <view class="muted">先去「场所」添加家或公司，再到「常用」选用一份清单。</view>
     <button class="btn-primary" bindtap="goPlaces">去添加场所</button>

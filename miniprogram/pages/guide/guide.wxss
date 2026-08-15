@@ -97,8 +97,3 @@
   font-size: 22rpx;
   color: #bdbdbd;
 }
-.memo-img {
-  width: 260rpx;
-  height: 260rpx;
-  margin: 0 auto 24rpx;
-}

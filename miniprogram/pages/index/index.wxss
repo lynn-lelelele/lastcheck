@@ -138,14 +138,3 @@
   60% { transform: scale(1.15); opacity: 1; }
   100% { transform: scale(1); opacity: 1; }
 }
-.memo-empty {
-  width: 220rpx;
-  height: 220rpx;
-  margin: 0 auto 16rpx;
-  display: block;
-}
-
-.memo-badge {
-  border-radius: 50%;
-  background: #ffffff;
-}
