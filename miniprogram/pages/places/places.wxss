@@ -38,4 +38,10 @@
   margin: 0 auto 16rpx;
   display: block;
   opacity: 0.55;
+  animation: floatHint 2.6s ease-in-out infinite;
+}
+
+@keyframes floatHint {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8rpx); }
 }

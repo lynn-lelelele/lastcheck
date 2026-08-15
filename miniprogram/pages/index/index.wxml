@@ -18,7 +18,7 @@
       >{{item.name}}</view>
     </view>
     <view class="card-title">出门清单</view>
-    <view wx:if="{{items.length === 0}}" class="muted">该场所还没有物品。</view>
+    <view wx:if="{{items.length === 0}}" class="muted">这里还没有物品。</view>
     <button class="btn-primary ghost" wx:if="{{items.length === 0}}" bindtap="goTemplates">看看常用清单</button>
     <view
       wx:for="{{items}}"
@@ -44,9 +44,9 @@
 
   <view class="card empty-card" wx:if="{{!currentPlace}}">
     <image class="empty-icon" src="/images/tab/checklist.png" mode="aspectFit"></image>
-    <view class="card-title">还没有场所</view>
-    <view class="muted">添加家或公司，再到「常用」选用一份出门清单。</view>
-    <button class="btn-primary" bindtap="goPlaces">添加场所</button>
+    <view class="card-title">还没有常去的地方</view>
+    <view class="muted">添加常去的地方，再到「常用」选用一份出门清单。</view>
+    <button class="btn-primary" bindtap="goPlaces">添加常去的地方</button>
     <button class="btn-secondary" bindtap="goTemplates">看看常用清单</button>
   </view>
 </view>

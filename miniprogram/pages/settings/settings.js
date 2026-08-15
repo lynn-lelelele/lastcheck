@@ -37,7 +37,7 @@ Page({
   onClearData() {
     wx.showModal({
       title: '清空本地数据',
-      content: '将删除所有场所与清单数据，此操作不可恢复。',
+      content: '将删除所有地点与清单数据，此操作不可恢复。',
       confirmColor: '#c0392b',
       success: (res) => {
         if (!res.confirm) return;

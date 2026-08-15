@@ -19,7 +19,7 @@ function distanceMeters(lat1, lng1, lat2, lng2) {
   return R * c;
 }
 
-// 是否位于场所围栏内（place: {latitude, longitude, radius}）
+// 是否位于地点围栏内（place: {latitude, longitude, radius}）
 function isInside(place, lat, lng) {
   if (!place || typeof lat !== 'number' || typeof lng !== 'number') {
     return false;

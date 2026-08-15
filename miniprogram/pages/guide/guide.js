@@ -22,7 +22,7 @@ const QUESTIONS = [
       { key: 'home', label: '家' },
       { key: 'office', label: '公司' },
       { key: 'gym', label: '健身房' },
-      { key: 'other', label: '其他场所' }
+      { key: 'other', label: '其他地点' }
     ]
   },
   {
@@ -38,7 +38,7 @@ const QUESTIONS = [
     id: 'auto',
     title: '要不要开启自动提醒？',
     options: [
-      { key: 'on', label: '开启：离开场所时自动提醒（推荐）' },
+      { key: 'on', label: '开启：离开常去地点时自动提醒（推荐）' },
       { key: 'off', label: '暂不开启：先手动打卡' }
     ]
   }
@@ -91,7 +91,7 @@ Page({
     }
   },
 
-  // 第 1 题：创建场所。先让用户选择获取方式，不依赖定位 API 的回调，
+  // 第 1 题：创建地点。先让用户选择获取方式，不依赖定位 API 的回调，
   // 保证任何环境下点「家」都有即时反馈。
   pickScene(key, answers) {
     wx.showActionSheet({
@@ -104,10 +104,10 @@ Page({
         this.tryMapPick(key, answers);
       },
       fail: () => {
-        // 取消选择：弹确认，避免误触导致场所缺失
+        // 取消选择：弹确认，避免误触导致地点缺失
         wx.showModal({
           title: '未选择获取方式',
-          content: '可用演示位置创建场所，之后可在「场所」页修改或删除。',
+          content: '可用演示位置创建地点，之后可在「地点」页修改或删除。',
           confirmText: '用演示位置',
           cancelText: '跳过',
           success: (r) => {
@@ -141,7 +141,7 @@ Page({
       wx.hideLoading();
       wx.showModal({
         title: '地图不可用',
-        content: '当前为演示模式，已用演示位置创建场所。正式环境（登录工具或真机）会正常使用地图选点。',
+        content: '当前为演示模式，已用演示位置创建地点。正式环境（登录工具或真机）会正常使用地图选点。',
         confirmText: '知道了',
         success: () => {
           this.createPlaceWithCoords(key, answers, '演示位置（长沙，可删除）', 28.228209, 112.938814);
@@ -158,7 +158,7 @@ Page({
     });
   },
 
-  // 用坐标创建场所（地图/定位/演示位置共用）
+  // 用坐标创建地点（地图/定位/演示位置共用）
   createPlaceWithCoords(key, answers, address, latitude, longitude) {
     const places = store.getPlaces();
     places.push({
@@ -218,7 +218,7 @@ Page({
       const place = places[places.length - 1];
       this.setData({ summary: '已为你准备「' + place.name + '」的出门清单（' + place.items.length + ' 件物品），定位提醒已按你的选择配置。' });
     } else {
-      this.setData({ summary: '已记录你的偏好：' + this.sceneLabel(answers[0]) + '。场所定位未完成，可稍后在「场所」页添加。' });
+      this.setData({ summary: '已记录你的偏好：' + this.sceneLabel(answers[0]) + '。地点定位未完成，可稍后在「地点」页补充。' });
     }
     this.setData({ phase: 'done' });
   },
@@ -226,7 +226,7 @@ Page({
   sceneLabel(key) {
     const q = QUESTIONS[0];
     const opt = q.options.find(o => o.key === key);
-    return opt ? opt.label : '场所';
+    return opt ? opt.label : '地点';
   },
 
   onDone() {

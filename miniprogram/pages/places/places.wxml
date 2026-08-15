@@ -1,5 +1,5 @@
 <view class="container">
-  <button class="btn-primary add-btn" bindtap="onAddPlace">添加场所（选择当前位置）</button>
+  <button class="btn-primary add-btn" bindtap="onAddPlace">添加常去的地方</button>
 
   <view class="card" wx:for="{{places}}" wx:key="id">
     <view class="place-row">
@@ -15,7 +15,7 @@
 
   <view class="card empty-card" wx:if="{{places.length === 0}}">
     <image class="empty-icon" src="/images/tab/place.png" mode="aspectFit"></image>
-    <view class="card-title">还没有场所</view>
-    <view class="muted">添加家或公司，出门时它会在你离开时提醒你。</view>
+    <view class="card-title">还没有常去的地方</view>
+    <view class="muted">添加家或公司，离开时会自动提醒你。</view>
   </view>
 </view>

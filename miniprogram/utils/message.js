@@ -1,4 +1,4 @@
-// 场景化提醒文案：根据场所名称关键词生成有温度的提醒话术。
+// 场景化提醒文案：根据地点名称关键词生成有温度的提醒话术。
 // 规则后续迁移到 data/scene-templates.json（M3，数据化、社区共建）。
 
 function buildLeaveMessage(place, pendingItems) {

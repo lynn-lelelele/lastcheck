@@ -11,7 +11,7 @@ Page({
     this.setData({ places: store.getPlaces() });
   },
 
-  // 添加场所：先选类型（自动带常用物品），再选位置方式
+  // 添加常去的地方：先选类型（自动带常用物品），再选位置方式
   onAddPlace() {
     const names = presets.SCENE_TYPES.map(s => s.label).concat(['其他']);
     wx.showActionSheet({
@@ -53,7 +53,7 @@ Page({
       wx.hideLoading();
       wx.showModal({
         title: '地图不可用',
-        content: '当前环境无法打开地图，可用演示位置创建场所，之后可修改或删除。',
+        content: '当前环境无法打开地图，可用演示位置创建地点，之后可修改或删除。',
         confirmText: '用演示位置',
         success: () => this.addPlaceWithCoords(preset.label, '演示位置（长沙，可删除）', 28.228209, 112.938814, preset.items)
       });
@@ -71,7 +71,7 @@ Page({
     const places = store.getPlaces();
     places.push({
       id: 'p_' + Date.now(),
-      name: name || '新场所',
+      name: name || '新地点',
       address: address || '',
       latitude: latitude,
       longitude: longitude,
@@ -104,8 +104,8 @@ Page({
   onRemovePlace(e) {
     const id = e.currentTarget.dataset.id;
     wx.showModal({
-      title: '删除场所',
-      content: '删除后该场所的清单也会一并移除。',
+      title: '删除地点',
+      content: '删除后这里对应的清单也会一并移除。',
       confirmColor: '#c0392b',
       success: (res) => {
         if (!res.confirm) return;

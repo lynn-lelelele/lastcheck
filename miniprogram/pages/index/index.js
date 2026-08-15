@@ -22,7 +22,7 @@ Page({
         if (res.authSetting['scope.userLocation'] === false) {
           wx.showModal({
             title: '开启定位',
-            content: '授权后，离开场所时才能自动提醒你检查清单。当前可以先用手动打卡体验。',
+            content: '授权后，离开常去地点时才能自动提醒你检查清单。当前可以先用手动打卡体验。',
             confirmText: '去开启',
             cancelText: '暂不',
             success: (r) => {

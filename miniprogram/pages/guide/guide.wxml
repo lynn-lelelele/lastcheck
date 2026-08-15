@@ -3,7 +3,7 @@
   <block wx:if="{{phase === 'welcome'}}">
     <view class="hero">
       <view class="logo">LastCheck</view>
-      <view class="slogan">离开场所前，替你盯住要带的东西</view>
+      <view class="slogan">离开常去的地方前，替你盯住要带的东西</view>
     </view>
     <button class="btn-primary start-btn" bindtap="onStart">开始配置（约 1 分钟）</button>
   </block>

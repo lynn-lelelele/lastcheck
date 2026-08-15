@@ -14,8 +14,8 @@ Page({
     const places = store.getPlaces();
     if (places.length === 0) {
       wx.showModal({
-        title: '还没有场所',
-        content: '请先到「场所」页添加一个地点，再把这份清单用到该场所。',
+        title: '还没有常去的地方',
+        content: '请先到「地点」页添加一个常去的地方，再把这份清单用到该地点。',
         confirmText: '去添加',
         success: (r) => {
           if (r.confirm) {
