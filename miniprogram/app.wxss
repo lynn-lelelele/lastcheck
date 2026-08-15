@@ -10,7 +10,7 @@ page {
 }
 
 .card {
-  background: #f7f4ee;
+  background: #faf8f2;
   border: 3rpx solid #e8e3d9;
   border-radius: 24rpx;
   padding: 32rpx;
