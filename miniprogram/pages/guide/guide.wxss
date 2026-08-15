@@ -16,10 +16,11 @@
 }
 
 .logo {
-  font-size: 72rpx;
-  font-weight: 800;
+  font-family: 'SerifTitle', 'PingFang SC', sans-serif;
+  font-size: 80rpx;
+  font-weight: 600;
   color: #b08968;
-  letter-spacing: 2rpx;
+  letter-spacing: 4rpx;
 }
 
 .logo.done {

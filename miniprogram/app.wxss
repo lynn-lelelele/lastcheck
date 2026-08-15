@@ -1,3 +1,9 @@
+@font-face {
+  font-family: 'SerifTitle';
+  src: url('/fonts/serif-title.ttf') format('truetype');
+  font-weight: 400;
+}
+
 page {
   background: #f7f4ee;
   color: #2e2b26;
@@ -19,8 +25,9 @@ page {
 }
 
 .card-title {
-  font-size: 34rpx;
-  font-weight: 800;
+  font-family: 'SerifTitle', 'PingFang SC', sans-serif;
+  font-size: 36rpx;
+  font-weight: 600;
   color: #2e2b26;
   margin-bottom: 16rpx;
 }
@@ -33,7 +40,7 @@ page {
   font-weight: 800;
   box-shadow: 0 2rpx 10rpx rgba(46, 43, 38, 0.18);
   margin-top: 16rpx;
-  transition: transform 0.1s ease, box-shadow 0.1s ease;
+  transition: transform 0.15s ease, opacity 0.15s ease, box-shadow 0.15s ease;
 }
 
 .btn-primary::after {
