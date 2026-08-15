@@ -12,7 +12,9 @@ Page({
     triggerOk: false,
     showLeaveCard: false,
     mockNotif: { visible: false, title: '', content: '' },
-    celebration: false
+    celebration: false,
+    editMode: false,
+    newItem: ''
   },
 
   onLoad() {
@@ -154,6 +156,44 @@ Page({
     if (idx === -1) return;
     places[idx].checkedMap = this.data.checkedMap;
     store.savePlaces(places);
+  },
+
+  onToggleEdit() {
+    this.setData({ editMode: !this.data.editMode, newItem: '' });
+  },
+
+  onNewItemInput(e) {
+    this.setData({ newItem: e.detail.value });
+  },
+
+  onAddItem() {
+    const name = (this.data.newItem || '').trim();
+    if (!name) return;
+    const items = this.data.items.concat([name]);
+    const places = store.getPlaces();
+    const idx = places.findIndex(p => p.id === this.data.currentPlaceId);
+    if (idx === -1) return;
+    places[idx].items = items;
+    store.savePlaces(places);
+    this.setData({ items, newItem: '' });
+  },
+
+  onRemoveItem(e) {
+    const i = e.currentTarget.dataset.index;
+    const items = this.data.items.slice();
+    const old = this.data.checkedMap || {};
+    items.splice(i, 1);
+    const checkedMap = {};
+    items.forEach((_, j) => {
+      checkedMap[j] = j < i ? !!old[j] : !!old[j + 1];
+    });
+    const places = store.getPlaces();
+    const idx = places.findIndex(p => p.id === this.data.currentPlaceId);
+    if (idx === -1) return;
+    places[idx].items = items;
+    places[idx].checkedMap = checkedMap;
+    store.savePlaces(places);
+    this.setData({ items, checkedMap });
   },
 
   goTemplates() {

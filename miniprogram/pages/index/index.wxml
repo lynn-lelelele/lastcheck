@@ -17,7 +17,10 @@
         bindtap="onSwitchPlace"
       >{{item.name}}</view>
     </view>
-    <view class="card-title">出门清单</view>
+    <view class="card-head">
+      <view class="card-title">出门清单</view>
+      <view class="edit-btn" bindtap="onToggleEdit">{{editMode ? '完成' : '编辑'}}</view>
+    </view>
     <view wx:if="{{items.length === 0}}" class="muted">这里还没有物品。</view>
     <button class="btn-primary ghost" wx:if="{{items.length === 0}}" bindtap="goTemplates">看看常用清单</button>
     <view
@@ -29,11 +32,18 @@
       style="animation-delay: {{index * 40}}ms"
     >
       <text class="item-name">{{item}}</text>
-      <view class="check-dot {{checkedMap[index] ? 'checked' : ''}}">
-        <text class="check-mark" wx:if="{{checkedMap[index]}}">✓</text>
+      <view class="item-right">
+        <view class="remove-x" wx:if="{{editMode}}" data-index="{{index}}" bindtap="onRemoveItem">×</view>
+        <view class="check-dot {{checkedMap[index] ? 'checked' : ''}}">
+          <text class="check-mark" wx:if="{{checkedMap[index]}}">✓</text>
+        </view>
       </view>
     </view>
-    <button class="btn-primary" bindtap="onCheckAll" wx:if="{{items.length}}">全部确认已带</button>
+    <button class="btn-primary" bindtap="onCheckAll" wx:if="{{items.length && !editMode}}">全部确认已带</button>
+    <view class="add-row" wx:if="{{editMode}}">
+      <input class="add-input" placeholder="添加要带的物品" value="{{newItem}}" bindinput="onNewItemInput" confirm-type="done" bindconfirm="onAddItem" />
+      <button class="btn-primary add-btn" bindtap="onAddItem">添加</button>
+    </view>
   </view>
 
   <view class="card" wx:if="{{showLeaveCard}}">
