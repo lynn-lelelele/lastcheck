@@ -80,9 +80,29 @@ Page({
   },
 
   addPlaceWithCoords(name, address, latitude, longitude, items) {
+    const finalName = name || '新地点';
+    const exists = placeService.list().some(p => p.name === finalName);
+    if (exists) {
+      wx.showModal({
+        title: '已有同名地点',
+        content: '已存在「' + finalName + '」，仍要再添加一个吗？',
+        confirmText: '仍要添加',
+        cancelText: '取消',
+        success: (res) => {
+          if (res.confirm) {
+            this.savePlace(finalName, address, latitude, longitude, items);
+          }
+        }
+      });
+      return;
+    }
+    this.savePlace(finalName, address, latitude, longitude, items);
+  },
+
+  savePlace(name, address, latitude, longitude, items) {
     placeService.add({
       id: 'p_' + Date.now(),
-      name: name || '新地点',
+      name: name,
       address: address || '',
       latitude: latitude,
       longitude: longitude,

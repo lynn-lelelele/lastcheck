@@ -174,14 +174,19 @@ Page({
 
   // 用坐标创建地点（地图/定位/演示位置共用）
   createPlaceWithCoords(key, answers, address, latitude, longitude) {
-    placeService.add({
-      id: 'p_' + Date.now(),
-      name: this.sceneLabel(key),
-      address: address || '',
-      latitude: latitude,
-      longitude: longitude,
-      items: []
-    });
+    const name = this.sceneLabel(key);
+    // 已有同名地点则不重复创建，直接继续
+    const exists = placeService.list().some(p => p.name === name);
+    if (!exists) {
+      placeService.add({
+        id: 'p_' + Date.now(),
+        name: name,
+        address: address || '',
+        latitude: latitude,
+        longitude: longitude,
+        items: []
+      });
+    }
     this.setData({ answers });
     this.showQuestion(this.data.current + 1);
   },
