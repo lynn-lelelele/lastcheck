@@ -62,3 +62,9 @@
   margin-bottom: 16rpx;
   word-break: break-all;
 }
+.btn-primary.ghost {
+  background: #ffffff;
+  color: #1f1f1f;
+  border: 2rpx solid #1f1f1f;
+  margin-top: 16rpx;
+}
