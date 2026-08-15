@@ -68,3 +68,31 @@
   border: 2rpx solid #1f1f1f;
   margin-top: 16rpx;
 }
+.mock-notif {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 999;
+  background: #1f1f1f;
+  color: #ffffff;
+  padding: 24rpx 32rpx;
+  transform: translateY(-120%);
+  transition: transform 0.25s ease;
+  box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.25);
+}
+
+.mock-notif.show {
+  transform: translateY(0);
+}
+
+.mock-notif-title {
+  font-size: 26rpx;
+  color: #bdbdbd;
+}
+
+.mock-notif-content {
+  margin-top: 6rpx;
+  font-size: 28rpx;
+  font-weight: 600;
+}

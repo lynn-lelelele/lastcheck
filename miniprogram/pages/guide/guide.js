@@ -1,4 +1,5 @@
 const store = require('../../utils/store');
+const subscribe = require('../../utils/subscribe');
 
 // 场景 → 默认物品（focus=random 时使用）
 const SCENE_ITEMS = {
@@ -188,6 +189,14 @@ Page({
 
   pickAuto(key, answers) {
     if (key === 'on') {
+      // 请求订阅消息授权（正式环境弹授权框；游客模式安全降级）
+      subscribe.requestReminderSubscription().then((ok) => {
+        if (ok) {
+          wx.showToast({ title: '提醒已开启', icon: 'success' });
+        } else {
+          wx.showToast({ title: '当前环境暂无法开启推送', icon: 'none' });
+        }
+      });
       wx.authorize({
         scope: 'scope.userLocation',
         fail: () => {

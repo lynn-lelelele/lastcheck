@@ -10,7 +10,8 @@ Page({
     triggerInfo: '',
     triggerOk: false,
     showLeaveCard: false,
-    build: 'cfaf591'
+    build: 'cfaf591',
+    mockNotif: { visible: false, title: '', content: '' }
   },
 
   onLoad() {
@@ -87,6 +88,23 @@ Page({
     if (!this.data.currentPlace) return;
     this.setData({ showLeaveCard: true, triggerInfo: '', triggerOk: false });
     this.refreshLeaveStatus();
+    this.showMockNotification();
+  },
+
+  // 模拟系统通知横幅：游客模式下体验推送效果，正式环境由订阅消息替代
+  showMockNotification() {
+    const place = this.data.currentPlace;
+    const pending = this.data.items.filter((_, i) => !this.data.checkedMap[i]);
+    const content = pending.length
+      ? '离开「' + place.name + '」前请确认：' + pending.join('、')
+      : '离开「' + place.name + '」前请确认携带物品';
+    this.setData({ mockNotif: { visible: true, title: '出门清单', content } });
+    if (wx.vibrateShort) {
+      wx.vibrateShort({ type: 'medium' });
+    }
+    setTimeout(() => {
+      this.setData({ 'mockNotif.visible': false });
+    }, 4000);
   },
 
   refreshLeaveStatus() {
