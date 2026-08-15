@@ -3,7 +3,6 @@
   <view class="mock-notif-title">{{mockNotif.title}}</view>
   <view class="mock-notif-content">{{mockNotif.content}}</view>
 </view>
-<view class="debug-bar">build {{build}} | places {{places.length}} | current {{currentPlace ? currentPlace.name : '无'}} | items {{items.length}}</view>
   <view class="card" wx:if="{{places.length}}">
     <view class="card-title">当前场所</view>
     <view class="place-list">

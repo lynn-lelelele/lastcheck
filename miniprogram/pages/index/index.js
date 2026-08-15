@@ -10,7 +10,6 @@ Page({
     triggerInfo: '',
     triggerOk: false,
     showLeaveCard: false,
-    build: 'cfaf591',
     mockNotif: { visible: false, title: '', content: '' }
   },
 
