@@ -40,10 +40,6 @@
     <button class="btn-primary" bindtap="onCheckAll" wx:if="{{items.length}}">全部确认已带</button>
   </view>
 
-  <view class="card" wx:if="{{currentPlace && items.length}}">
-    <button class="btn-primary leave-btn" bindtap="onManualLeave">我出门了</button>
-  </view>
-
   <view class="card" wx:if="{{showLeaveCard}}">
     <view class="card-title">出门提醒</view>
     <view class="leave-tip">离开「{{currentPlace.name}}」前请确认以下物品</view>

@@ -48,6 +48,11 @@ Page({
     });
   },
 
+  onDemoRemind() {
+    wx.setStorageSync('lastcheck_demo_trigger', true);
+    wx.switchTab({ url: '/pages/index/index' });
+  },
+
   onOpenRepo() {
     wx.setClipboardData({
       data: 'https://github.com/lynn-lelelele/lastcheck',

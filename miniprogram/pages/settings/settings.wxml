@@ -15,6 +15,12 @@
   </view>
 
   <view class="card">
+    <view class="card-title">演示</view>
+    <view class="muted">正式版检测到您离开场所时会自动提醒。当前环境无后台定位，可用此按钮模拟触发。</view>
+    <button class="btn-primary" bindtap="onDemoRemind">模拟出门提醒</button>
+  </view>
+
+  <view class="card">
     <view class="card-title">数据</view>
     <view class="row">
       <text class="danger" bindtap="onClearData">清空本地数据</text>

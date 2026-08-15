@@ -38,6 +38,11 @@ Page({
 
   onShow() {
     console.log('[LastCheck] index onShow');
+    // 设置页触发的演示出门提醒
+    if (wx.getStorageSync('lastcheck_demo_trigger')) {
+      wx.removeStorageSync('lastcheck_demo_trigger');
+      this.onManualLeave();
+    }
     const places = store.getPlaces();
     let currentPlaceId = wx.getStorageSync('lastcheck_current_place_id') || '';
     if (places.length === 0) {
