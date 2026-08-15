@@ -2,6 +2,7 @@
   <!-- 欢迎页 -->
   <block wx:if="{{phase === 'welcome'}}">
     <view class="hero">
+      <image class="memo-img" src="/images/memo/memo.png" mode="aspectFit"></image>
       <view class="logo">LastCheck</view>
       <view class="slogan">离开场所前，替你盯住要带的东西</view>
     </view>
