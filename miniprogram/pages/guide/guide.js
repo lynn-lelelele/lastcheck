@@ -166,7 +166,8 @@ Page({
     setTimeout(useDemo, 8000);
     wx.chooseLocation({
       success: (res) => {
-        finish(res.address || res.name || '', res.latitude, res.longitude);
+        // 类型名作为地点名（在 createPlaceWithCoords 内），这里只传地址
+        finish(res.address || '', res.latitude, res.longitude);
       },
       fail: () => useDemo()
     });

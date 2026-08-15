@@ -73,7 +73,8 @@ Page({
     setTimeout(useDemo, 8000);
     wx.chooseLocation({
       success: (res) => {
-        finish(res.name || name, res.address || '', res.latitude, res.longitude);
+        // 地点名保持用户选的类型名，地图只提供坐标与地址
+        finish(name, res.address || '', res.latitude, res.longitude);
       },
       fail: () => useDemo()
     });
