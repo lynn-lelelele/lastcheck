@@ -221,7 +221,7 @@ Page({
     }
     this.setData({ answers });
 
-    const places = store.getPlaces();
+    const places = placeService.list();
     if (places.length) {
       const place = places[places.length - 1];
       this.setData({ summary: '已为你准备「' + place.name + '」的出门清单（' + place.items.length + ' 件物品），定位提醒已按你的选择配置。' });
