@@ -8,6 +8,7 @@ Page({
     items: [],
     checkedMap: {},
     triggerInfo: '',
+    triggerOk: false,
     showLeaveCard: false
   },
 
@@ -36,7 +37,7 @@ Page({
     const places = store.getPlaces();
     let currentPlaceId = wx.getStorageSync('lastcheck_current_place_id') || '';
     if (places.length === 0) {
-      this.setData({ places: [], currentPlace: null, items: [], triggerInfo: '', showLeaveCard: false });
+      this.setData({ places: [], currentPlace: null, items: [], triggerInfo: '', triggerOk: false, showLeaveCard: false });
       return;
     }
     if (!places.some(p => p.id === currentPlaceId)) {
@@ -51,6 +52,7 @@ Page({
       items: currentPlace.items || [],
       checkedMap: currentPlace.checkedMap || {},
       triggerInfo: '',
+      triggerOk: false,
       showLeaveCard: false
     });
   },
@@ -81,7 +83,7 @@ Page({
   // M1-6: 手动出门打卡，验证「提醒 → 确认」交互闭环
   onManualLeave() {
     if (!this.data.currentPlace) return;
-    this.setData({ showLeaveCard: true, triggerInfo: '' });
+    this.setData({ showLeaveCard: true, triggerInfo: '', triggerOk: false });
     this.refreshLeaveStatus();
   },
 
@@ -91,14 +93,14 @@ Page({
     const checked = this.data.checkedMap;
     const pending = items.filter((_, i) => !checked[i]);
     if (items.length === 0) {
-      this.setData({ triggerInfo: '清单为空，先去模板库套用物品。' });
+      this.setData({ triggerInfo: '清单为空，先去模板库套用物品。', triggerOk: false });
     } else if (pending.length === 0) {
-      this.setData({ triggerInfo: '全部确认已带，可以安心出门。' });
+      this.setData({ triggerInfo: '全部确认已带，可以安心出门。', triggerOk: true });
     } else {
       const names = pending.map((_, i) => {
         return items[i];
       });
-      this.setData({ triggerInfo: '还有未确认：' + names.join('、') });
+      this.setData({ triggerInfo: '还有未确认：' + names.join('、'), triggerOk: false });
     }
   },
 
