@@ -179,7 +179,7 @@ Page({
     // 已有同名地点则不重复创建，直接继续
     const exists = placeService.list().some(p => p.name === name);
     if (!exists) {
-      placeService.add({
+      const place = placeService.add({
         id: 'p_' + Date.now(),
         name: name,
         address: address || '',
@@ -187,6 +187,7 @@ Page({
         longitude: longitude,
         items: []
       });
+      placeService.setCurrentPlaceId(place.id);
     }
     this.setData({ answers });
     this.showQuestion(this.data.current + 1);

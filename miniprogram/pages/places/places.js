@@ -101,7 +101,7 @@ Page({
   },
 
   savePlace(name, address, latitude, longitude, items) {
-    placeService.add({
+    const place = placeService.add({
       id: 'p_' + Date.now(),
       name: name,
       address: address || '',
@@ -109,6 +109,8 @@ Page({
       longitude: longitude,
       items: items || []
     });
+    // 添加后自动切到新地点，避免清单页仍显示旧地点
+    placeService.setCurrentPlaceId(place.id);
     this.setData({ places: placeService.list() });
     wx.showToast({ title: '已添加', icon: 'success' });
   },
