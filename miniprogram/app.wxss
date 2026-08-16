@@ -1,6 +1,6 @@
 @font-face {
   font-family: 'SerifTitle';
-  src: url('/fonts/serif-title.ttf') format('truetype');
+  src: url('fonts/serif-title.ttf') format('truetype');
   font-weight: 400;
 }
 
