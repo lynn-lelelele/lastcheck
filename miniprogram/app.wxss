@@ -1,9 +1,3 @@
-@font-face {
-  font-family: 'SerifTitle';
-  src: url('fonts/serif-title.ttf') format('truetype');
-  font-weight: 400;
-}
-
 page {
   background: #f7f4ee;
   color: #2e2b26;
@@ -37,7 +31,7 @@ page {
 }
 
 .card-title {
-  font-family: 'SerifTitle', 'PingFang SC', sans-serif;
+  
   font-size: 36rpx;
   font-weight: 600;
   color: #2e2b26;
