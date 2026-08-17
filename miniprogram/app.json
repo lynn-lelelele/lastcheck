@@ -18,6 +18,7 @@
     "selectedColor": "#b08968",
     "backgroundColor": "#ffffff",
     "borderStyle": "white",
+    "custom": true,
     "list": [
       { "pagePath": "pages/index/index", "text": "清单", "iconPath": "images/tab/checklist.png", "selectedIconPath": "images/tab/checklist-active.png" },
       { "pagePath": "pages/places/places", "text": "地点", "iconPath": "images/tab/place.png", "selectedIconPath": "images/tab/place-active.png" },

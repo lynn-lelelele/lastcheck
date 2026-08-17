@@ -8,6 +8,9 @@ Page({
   },
 
   onShow() {
+    if (typeof this.getTabBar === 'function' && this.getTabBar()) {
+      this.getTabBar().setData({ selected: 2 });
+    }
     console.log('[LastCheck] templates onShow');
     this.setData({
       presetsList: templateService.getPresets(),
@@ -36,47 +39,64 @@ Page({
     this.setData({ customList: templateService.getCustomList() });
   },
 
+  // 用一份清单 = 地图选点生成一个新地点（新围栏），清单物品自动带上
   onUse(e) {
     const customId = e.currentTarget.dataset.custom;
     const key = e.currentTarget.dataset.key;
     let items = [];
+    let label = '';
     if (customId) {
       const got = templateService.getItemsById(customId);
       if (got === null) return;
       items = got;
+      label = this.data.customList.find(t => t.id === customId).name;
     } else {
       const got = templateService.getItemsByKey(key);
       if (got === null) return;
       items = got;
+      label = this.data.presetsList.find(p => p.key === key).label;
     }
 
-    const places = placeService.list();
-    if (places.length === 0) {
-      wx.showModal({
-        title: '还没有常去的地方',
-        content: '请先到「地点」页添加一个常去的地方，再把这份清单用到它。',
-        confirmText: '去添加',
-        success: (r) => {
-          if (r.confirm) {
-            wx.switchTab({ url: '/pages/places/places' });
-          }
-        }
+    wx.showLoading({ title: '正在选择位置…', mask: true });
+    let settled = false;
+
+    const finish = (address, latitude, longitude) => {
+      if (settled) return;
+      settled = true;
+      wx.hideLoading();
+      const place = placeService.add({
+        id: 'p_' + Date.now(),
+        name: label,
+        address: address || '',
+        latitude: latitude,
+        longitude: longitude,
+        items: items.slice()
       });
-      return;
-    }
+      placeService.setCurrentPlaceId(place.id);
+      wx.showToast({ title: '已创建「' + label + '」', icon: 'success' });
+      setTimeout(() => {
+        wx.switchTab({ url: '/pages/index/index' });
+      }, 800);
+    };
 
-    const names = places.map(p => p.name);
-    wx.showActionSheet({
-      itemList: names,
+    const useDemo = () => {
+      if (settled) return;
+      settled = true;
+      wx.hideLoading();
+      wx.showModal({
+        title: '地图不可用',
+        content: '已用示例位置创建「' + label + '」，稍后可在地点页修改。',
+        confirmText: '知道了',
+        success: () => finish('示例位置（稍后可修改）', 28.228209, 112.938814)
+      });
+    };
+
+    setTimeout(useDemo, 8000);
+    wx.chooseLocation({
       success: (res) => {
-        const target = places[res.tapIndex];
-        placeService.update(target.id, { items: items.slice(), checkedMap: {} });
-        placeService.setCurrentPlaceId(target.id);
-        wx.showToast({ title: '已用到「' + target.name + '」', icon: 'success' });
-        setTimeout(() => {
-          wx.switchTab({ url: '/pages/index/index' });
-        }, 800);
-      }
+        finish(res.address || '', res.latitude, res.longitude);
+      },
+      fail: () => useDemo()
     });
   }
 });

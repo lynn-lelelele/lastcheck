@@ -7,6 +7,9 @@ Page({
   },
 
   onShow() {
+    if (typeof this.getTabBar === 'function' && this.getTabBar()) {
+      this.getTabBar().setData({ selected: 1 });
+    }
     console.log('[LastCheck] places onShow');
     this.setData({ places: placeService.list() });
   },

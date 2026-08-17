@@ -39,6 +39,9 @@ Page({
   },
 
   onShow() {
+    if (typeof this.getTabBar === 'function' && this.getTabBar()) {
+      this.getTabBar().setData({ selected: 0 });
+    }
     console.log('[LastCheck] index onShow');
     // 设置页触发的演示出门提醒
     if (wx.getStorageSync('lastcheck_demo_trigger')) {
