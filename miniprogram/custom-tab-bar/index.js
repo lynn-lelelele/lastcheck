@@ -1,6 +1,7 @@
 Component({
   data: {
     selected: 0,
+    bounce: -1,
     list: [
       { pagePath: '/pages/index/index', text: '清单', iconPath: '/images/tab/checklist.png', selectedIconPath: '/images/tab/checklist-active.png' },
       { pagePath: '/pages/places/places', text: '地点', iconPath: '/images/tab/place.png', selectedIconPath: '/images/tab/place-active.png' },
@@ -14,7 +15,14 @@ Component({
       const index = e.currentTarget.dataset.index;
       const path = e.currentTarget.dataset.path;
       if (this.data.selected === index) return;
-      wx.switchTab({ url: path });
+      // 先移除弹跳标记，切页后再添加，保证每次切换都重放果冻动画
+      this.setData({ selected: index, bounce: -1 });
+      wx.switchTab({
+        url: path,
+        success: () => {
+          this.setData({ bounce: index });
+        }
+      });
     }
   }
 });
