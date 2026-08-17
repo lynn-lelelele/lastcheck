@@ -71,12 +71,14 @@
 
 /* 果冻：先冲大再回缩 */
 .tab-icon.bounce {
-  animation: jelly 0.45s ease;
+  animation: jelly 0.55s ease;
 }
 
 @keyframes jelly {
   0% { transform: translateY(-10rpx) scale(1.5); }
-  35% { transform: translateY(-16rpx) scale(1.75); }
-  65% { transform: translateY(-9rpx) scale(1.32); }
+  30% { transform: translateY(-18rpx) scale(1.9); }
+  50% { transform: translateY(-8rpx) scale(1.25); }
+  70% { transform: translateY(-13rpx) scale(1.65); }
+  85% { transform: translateY(-9rpx) scale(1.42); }
   100% { transform: translateY(-10rpx) scale(1.5); }
 }
