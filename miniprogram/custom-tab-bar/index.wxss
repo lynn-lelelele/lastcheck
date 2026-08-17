@@ -54,15 +54,7 @@
   transform: translateY(-10rpx) scale(1.5);
 }
 
-.tab-icon.bounce {
-  animation: bounce 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
 
-@keyframes bounce {
-  0% { transform: translateY(-10rpx) scale(0.7); }
-  55% { transform: translateY(-18rpx) scale(1.6); }
-  100% { transform: translateY(-10rpx) scale(1.5); }
-}
 
 .tab-text {
   font-size: 20rpx;
