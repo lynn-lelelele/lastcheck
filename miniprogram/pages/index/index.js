@@ -1,6 +1,9 @@
 const placeService = require('../../services/placeService');
 const checklistService = require('../../services/checklistService');
 const messageService = require('../../services/messageService');
+const locationService = require('../../services/locationService');
+const { createEngine } = require('../../core/geoFenceEngine');
+const { createReminderHandler } = require('../../services/reminderService');
 
 Page({
   data: {
@@ -15,7 +18,8 @@ Page({
     mockNotif: { visible: false, title: '', content: '' },
     celebration: false,
     editMode: false,
-    newItem: ''
+    newItem: '',
+    monitor: null
   },
 
   onLoad() {
@@ -71,6 +75,7 @@ Page({
       showLeaveCard: false,
       editMode: false
     });
+    this.startMonitoring();
   },
 
   onSwitchPlace(e) {
@@ -174,6 +179,33 @@ Page({
     if (result) {
       this.setData({ items: result.items, checkedMap: result.checkedMap });
     }
+  },
+
+  // M2：启动围栏自动监测。有地点时开始监听位置，离开围栏自动提醒。
+  startMonitoring() {
+    if (this.data.monitor) return;
+    const places = placeService.list();
+    if (places.length === 0) return;
+
+    const engine = createEngine();
+    const handler = createReminderHandler({
+      onRemind: (r) => {
+        // 当前用页面横幅模拟；M2 后期替换为订阅消息真推送
+        this.setData({ mockNotif: { visible: true, title: '出门清单', content: r.content } });
+        if (wx.vibrateShort) {
+          wx.vibrateShort({ type: 'heavy' });
+        }
+        setTimeout(() => {
+          this.setData({ 'mockNotif.visible': false });
+        }, 5000);
+      }
+    });
+    engine.onEvent(handler);
+
+    locationService.startBackgroundWatch((loc) => {
+      engine.update(placeService.list(), loc.latitude, loc.longitude);
+    });
+    this.setData({ monitor: { engine } });
   },
 
   goTemplates() {
